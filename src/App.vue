@@ -1,9 +1,11 @@
-<script setup></script>
+<script setup>
+import defaultLayout from './views/layouts/DefaultLayout.vue'
+</script>
 
 <template>
-  <header class="text-red-500">
-    <h1 class="text-4xl font-bold underline">Hello World</h1>
-  </header>
+  <defaultLayout>
+    <router-view />
+  </defaultLayout>
 </template>
 
 <style></style>
