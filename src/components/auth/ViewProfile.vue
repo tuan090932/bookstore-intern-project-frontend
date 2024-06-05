@@ -47,22 +47,20 @@ export default {
             }
           })
           .then((response) => {
-            console.log('Thông tin người dùng:', response.data)
+            console.log('User infor', response.data)
             this.name = response.data.name
             this.email = response.data.email
           })
           .catch((error) => {
-            console.error('Lỗi khi lấy thông tin người dùng:', error)
-            this.errorMessage = 'Có lỗi xảy ra khi lấy thông tin người dùng.'
+            console.error('Error when get infor user:', error)
+            this.errorMessage = 'Error when get infor user'
           })
       } else {
-        this.errorMessage = 'Không tìm thấy token. Vui lòng đăng nhập lại.'
+        this.errorMessage = 'Token not found. Please log in again.'
       }
     }
   }
 }
 </script>
 
-<style scoped>
-/* Thêm kiểu nếu cần thiết */
-</style>
+<style scoped></style>

@@ -97,15 +97,15 @@ export default {
           .then((response) => {
             const token = response.data.access_token
             localStorage.setItem('access_token', token)
-            console.log('Đăng nhập thành công!')
+            console.log('Login success!')
             this.getUserProfile()
             this.$router.push('/profile')
           })
           .catch(() => {
-            this.errorMessage = 'Email hoặc mật khẩu không đúng'
+            this.errorMessage = 'Email or password is incorrect'
           })
       } else {
-        this.errorMessage = 'Vui lòng điền đầy đủ thông tin'
+        this.errorMessage = 'Please enter email and password'
       }
     }
   }
