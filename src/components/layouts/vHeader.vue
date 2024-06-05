@@ -2,7 +2,7 @@
   <navBar />
 </template>
 <script setup>
-  '@components/layouts/NavBar.vue'
+import navBar from '@/components/layouts/NavBar.vue'
 </script>
 
 <style></style>
