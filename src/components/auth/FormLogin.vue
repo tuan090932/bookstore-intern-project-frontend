@@ -19,18 +19,25 @@
             required
           />
         </div>
-        <div class="mb-4">
+        <div class="mb-4 relative">
           <label for="password" class="block text-sm font-medium text-gray-700 mb-2"
             >Password</label
           >
           <input
             v-model="password"
-            type="password"
+            :type="showPassword ? 'text' : 'password'"
             id="password"
             class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter your password"
             required
           />
+          <button
+            type="button"
+            @click="togglePasswordVisibility"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+          >
+            <font-awesome-icon :icon="showPassword ? 'eye-slash' : 'eye'" />
+          </button>
           <a
             href="#"
             class="text-xs text-gray-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -72,10 +79,14 @@ export default {
     return {
       email: '',
       password: '',
+      showPassword: false,
       errorMessage: ''
     }
   },
   methods: {
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword
+    },
     handleSubmit() {
       if (this.email && this.password) {
         axios
@@ -102,5 +113,8 @@ export default {
 </script>
 
 <style>
-/* Add your styles here */
+input[type='password']::-ms-reveal,
+input[type='password']::-ms-clear {
+  display: none;
+}
 </style>
