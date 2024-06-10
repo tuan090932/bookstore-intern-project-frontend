@@ -2,6 +2,7 @@
   <!-- component -->
   <header
     class="header sticky top-0 bg-white shadow-md flex items-center justify-between px-8 py-02"
+    style="z-index: 1"
   >
     <!-- logo -->
     <h1 class="w-3/12">
