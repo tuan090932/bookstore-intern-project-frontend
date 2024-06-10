@@ -9,7 +9,7 @@
         class="rounded-lg overflow-hidden shadow-lg ring-1 ring-stone-400 ring-opacity-40"
       >
         <div class="relative">
-          <img class="w-full" src="@/assets/img/sach_mau.jpg" alt="Product Image" />
+          <img class="w-full" :src="book.image" alt="Product Image"/>
           <div
             class="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 m-2 rounded-md text-sm font-medium"
           >
@@ -35,18 +35,25 @@
 export default {
   data() {
     return {
-      books: [
-        { id: 1, title: 'Book One', description: 'Description One', price: '$10' },
-        { id: 2, title: 'Book Two', description: 'Description Two', price: '$15' },
-        { id: 3, title: 'Book Three', description: 'Description Three', price: '$20' },
-        { id: 4, title: 'Book Four', description: 'Description Four', price: '$25' },
-        { id: 5, title: 'Book Five', description: 'Description Five', price: '$30' },
-        { id: 6, title: 'Book Six', description: 'Description Six', price: '$35' },
-        { id: 7, title: 'Book Seven', description: 'Description Seven', price: '$40' },
-        { id: 8, title: 'Book Eight', description: 'Description Eight', price: '$45' },
-        { id: 9, title: 'Book Nine', description: 'Description Nine', price: '$50' },
-        { id: 10, title: 'Book Ten', description: 'Description Ten', price: '$55' }
-      ]
+      books: []
+    }
+  },
+  mounted() {
+    this.fetchBooks()
+  },
+  methods: {
+    /**
+     * Fetches a list of books from the API.
+     */
+    fetchBooks() {
+      fetch('http://localhost/api/books')
+        .then((response) => response.json())
+        .then((data) => {
+          this.books = data
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
   }
 }
