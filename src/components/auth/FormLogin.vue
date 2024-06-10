@@ -6,6 +6,8 @@
         {{ errorMessage }}
       </div>
       <form @submit.prevent="handleSubmit">
+
+        <!-- Email -->
         <div class="mb-4">
           <label for="email" class="block text-sm font-medium text-gray-700 mb-2"
             >Email Address</label
@@ -19,6 +21,8 @@
             required
           />
         </div>
+
+        <!-- Password -->
         <div class="mb-4 relative">
           <label for="password" class="block text-sm font-medium text-gray-700 mb-2"
             >Password</label
@@ -44,6 +48,8 @@
             >Forgot Password?</a
           >
         </div>
+
+        <!-- Remember me -->
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center">
             <input
@@ -60,6 +66,8 @@
             >Create Account</router-link
           >
         </div>
+
+        <!-- Login Button -->
         <button
           type="submit"
           class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
