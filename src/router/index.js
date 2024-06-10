@@ -18,6 +18,16 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: () => import('@/components/auth/ViewProfile.vue')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/components/auth/FormRegister.vue')
+    },
+    {
+      path: '/:catchAll(.*)',
+      name: 'notFound',
+      component: () => import('@/components/NotFound.vue')
     }
   ]
 })

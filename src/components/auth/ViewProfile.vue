@@ -7,7 +7,7 @@
         <p
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         >
-          {{ name }}
+          {{ user.name }}
         </p>
       </div>
       <div class="mb-4">
@@ -15,7 +15,7 @@
         <p
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         >
-          {{ email }}
+          {{ user.email }}
         </p>
       </div>
     </div>
@@ -23,41 +23,22 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { useUserStore } from '@/stores/user'
 
 export default {
   data() {
     return {
-      name: '',
-      email: '',
       errorMessage: ''
     }
   },
-  created() {
-    this.getUserProfile()
+  computed: {
+    user() {
+      return useUserStore().user
+    }
   },
-  methods: {
-    getUserProfile() {
-      const token = localStorage.getItem('access_token')
-      if (token) {
-        axios
-          .get('http://localhost/api/auth/profile', {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          .then((response) => {
-            console.log('User infor', response.data)
-            this.name = response.data.name
-            this.email = response.data.email
-          })
-          .catch((error) => {
-            console.error('Error when get infor user:', error)
-            this.errorMessage = 'Error when get infor user'
-          })
-      } else {
-        this.errorMessage = 'Token not found. Please log in again.'
-      }
+  created() {
+    if (!this.user) {
+      this.errorMessage = 'User information not found. Please log in.'
     }
   }
 }
