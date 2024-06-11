@@ -10,7 +10,6 @@
             type="text"
             id="name"
             v-model="name"
-            required
             class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter your name"
           />
@@ -24,7 +23,6 @@
             type="email"
             id="email"
             v-model="email"
-            required
             class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter your email"
           />
@@ -41,7 +39,6 @@
               :type="showPassword ? 'text' : 'password'"
               id="password"
               v-model="password"
-              required
               class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Enter your password"
             />
@@ -63,13 +60,19 @@
           >
           <div class="relative">
             <input
-              :type="showPassword ? 'text' : 'password'"
+              :type="showConfirmPassword ? 'text' : 'password'"
               id="confirmPassword"
               v-model="confirmPassword"
-              required
               class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Confirm your password"
             />
+            <button
+              type="button"
+              @click="showConfirmPassword = !showConfirmPassword"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+            >
+              <font-awesome-icon :icon="showConfirmPassword ? 'eye-slash' : 'eye'" />
+            </button>
           </div>
           <div v-if="confirmPasswordError" class="text-red-500 text-sm mt-1">
             {{ confirmPasswordError }}
@@ -111,7 +114,8 @@ export default {
       emailError: '',
       passwordError: '',
       confirmPasswordError: '',
-      showPassword: false
+      showPassword: false,
+      showConfirmPassword: false // Separate variable for confirm password visibility
     }
   },
   methods: {
