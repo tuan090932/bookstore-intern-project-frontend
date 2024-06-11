@@ -158,6 +158,8 @@ export default {
             this.emailError = 'Email already exists.'
           } else if (errors.password) {
             this.passwordError = 'Password must be at least 6 characters.'
+          } else if (errors.name) {
+            this.nameError = 'Name is required.'
           } else {
             this.errorMessage =
               'An error occurred during registration. Please check your information.'
