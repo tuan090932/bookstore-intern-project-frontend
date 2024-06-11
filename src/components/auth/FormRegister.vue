@@ -20,9 +20,10 @@
         <div class="mb-4">
           <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
           <input
-            type="email"
+            type="text"
             id="email"
             v-model="email"
+            @blur="validateEmail"
             class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter your email"
           />
@@ -119,8 +120,21 @@ export default {
     }
   },
   methods: {
+    validateEmail() {
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
+      if (!emailPattern.test(this.email)) {
+        this.emailError = 'Invalid email address.'
+      } else {
+        this.emailError = ''
+      }
+    },
     async handleSubmit() {
       this.clearErrors()
+
+      if (!this.email) {
+        this.emailError = 'Email is required.'
+        return
+      }
 
       if (this.password !== this.confirmPassword) {
         this.confirmPasswordError = 'Passwords do not match.'
