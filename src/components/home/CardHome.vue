@@ -56,7 +56,6 @@ export default {
      * Fetches a list of books from the API.
      */
     getBooks() {
-      console.log('getBooks')
       axios
         .get('http://localhost/api/books')
         .then((response) => {

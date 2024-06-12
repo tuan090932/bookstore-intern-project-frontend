@@ -4,7 +4,7 @@
     <div v-else>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="px-4">
-          <div class="h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+          <div class="rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
             <img class="w-full h-full object-cover" :src="book.image" alt="Product Image" />
           </div>
           <div class="grid grid-cols-1 mb-4">
@@ -20,21 +20,19 @@
 
         <div class="px-4">
           <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">{{ book.title }}</h2>
-          <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-            {{ book.description }}
-          </p>
+
           <div class="mb-4">
-            <div class="mb-2">
+            <div class="mb-2 flex">
               <span class="font-bold text-gray-700 dark:text-gray-300">Price:</span>
-              <span class="text-gray-600 dark:text-gray-300">{{ formatPrice(book.price) }}</span>
+              <p class="text-gray-600 dark:text-gray-300">{{ formatPrice(book.price) }}</p>
             </div>
-            <div class="mb-2">
+            <div class="mb-2 flex">
               <span class="font-bold text-gray-700 dark:text-gray-300">Stock:</span>
-              <span class="text-gray-600 dark:text-gray-300">{{ book.stock }}</span>
+              <p class="text-gray-600 dark:text-gray-300">{{ book.stock }}</p>
             </div>
-            <div class="mb-2">
+            <div class="mb-2 flex">
               <span class="font-bold text-gray-700 dark:text-gray-300">Number of Pages:</span>
-              <span class="text-gray-600 dark:text-gray-300">{{ book.num_pages }}</span>
+              <p class="text-gray-600 dark:text-gray-300">{{ book.num_pages }}</p>
             </div>
           </div>
           <div>
@@ -70,7 +68,6 @@ export default {
   methods: {
     getBookDetails() {
       const bookId = this.$route.params.id
-
       axios
         .get(`http://localhost/api/books/${bookId}`)
         .then((response) => {
