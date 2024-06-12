@@ -22,6 +22,7 @@
           class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer"
         >
           <router-link to="/">Home</router-link>
+          <router-link to="/">Home</router-link>
         </li>
         <li
           class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer"
@@ -36,6 +37,7 @@
         <li
           class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer"
         >
+          <router-link to="/about">About Us</router-link>
           <router-link to="/about">About Us</router-link>
         </li>
         <li
@@ -80,28 +82,27 @@ export default {
     LogoutButton
   },
   setup() {
-  const userStore = useUserStore()
+    const userStore = useUserStore()
 
-  const isLoggedIn = ref(!!userStore.token)
-  const user = ref(userStore.user)
+    const isLoggedIn = ref(!!userStore.token)
+    const user = ref(userStore.user)
 
-  onMounted(() => {
-    userStore.loadUserFromLocalStorage()
-  })
+    onMounted(() => {
+      userStore.loadUserFromLocalStorage()
+    })
 
-  // Thêm watcher để theo dõi sự thay đổi của user
-  watch(userStore, () => {
-    isLoggedIn.value = !!userStore.token
-    user.value = userStore.user
-  })
+    // Thêm watcher để theo dõi sự thay đổi của user
+    watch(userStore, () => {
+      isLoggedIn.value = !!userStore.token
+      user.value = userStore.user
+    })
 
-  return {
-    isLoggedIn,
-    user
+    return {
+      isLoggedIn,
+      user
+    }
   }
 }
-}
-
 </script>
 
 <style scoped>

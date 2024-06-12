@@ -1,15 +1,11 @@
-<template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
-</template>
+<script setup>
+import Categories from '@/components/about/Categories.vue'
+import InformationAbout from '@/components/about/InformationAbout.vue'
+import PublicherAbout from '@/components/about/PublicherAbout.vue'
+</script>
 
-<style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
-</style>
+<template>
+  <InformationAbout />
+  <PublicherAbout />
+  <Categories />
+</template>

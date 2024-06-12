@@ -2,30 +2,50 @@
   <div class="bg-gray-100 p-4 container mx-auto mt-20">
     <h1 class="text-2xl font-bold mb-4 text-center">Popular genres of books to read</h1>
     <p class="mb-4 text-center">The website always provides the newest and fastest categories</p>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div v-for="category in categories" :key="category.id" class="bg-white p-4 rounded shadow">
-        <div class="flex justify-center">
-          <img src="@/assets/img/trinhtham.png" alt="" class="w-1/2" />
+    <div v-if="errorMessage" class="text-red-500 text-center mb-4">{{ errorMessage }}</div>
+    <div v-else>
+      <div v-if="categories.length === 0" class="text-center text-blue-500 mb-4">
+        No categories available at the moment. Please check back later.
+      </div>
+
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div v-for="category in categories" :key="category.id" class="bg-white p-4 rounded shadow">
+          <h2 class="text-xl font-bold mb-2 text-center">{{ category.category_name }}</h2>
         </div>
-        <h2 class="text-xl font-bold mb-2 text-center">{{ category.name }}</h2>
-        <p class="text-center">{{ category.description }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
-      categories: [
-        { id: 1, name: 'Category 1', description: 'Description for Category 1' },
-        { id: 2, name: 'Category 2', description: 'Description for Category 2' },
-        { id: 3, name: 'Category 3', description: 'Description for Category 3' }
-      ]
+      categories: [],
+      errorMessage: ''
+    }
+  },
+  mounted() {
+    this.getCategories()
+  },
+  methods: {
+    getCategories() {
+      axios
+        .get('http://localhost/api/categories/')
+        .then((response) => {
+          this.categories = response.data
+        })
+        .catch((error) => {
+          console.error('Error fetching categories:', error)
+          this.errorMessage = 'Error fetching categories'
+        })
     }
   }
 }
 </script>
 
-<style></style>
+<style scoped>
+/* Add any specific CSS styles if needed */
+</style>
