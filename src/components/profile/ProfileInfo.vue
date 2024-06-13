@@ -1,0 +1,53 @@
+<template>
+  <div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+      <p
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      >
+        {{ user.name || 'chưa khai báo' }}
+      </p>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2">User Name</label>
+      <p
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      >
+        {{ user.user_name || 'chưa khai báo' }}
+      </p>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+      <p
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      >
+        {{ user.email || 'chưa khai báo' }}
+      </p>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2">Phone Number</label>
+      <p
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      >
+        {{ user.phone_number || 'chưa khai báo' }}
+      </p>
+    </div>
+    <button
+      @click="$emit('edit')"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+    >
+      Edit Profile
+    </button>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    user: {
+      type: Object,
+      required: true
+    }
+  }
+}
+</script>
