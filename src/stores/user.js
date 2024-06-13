@@ -22,14 +22,20 @@ export const useUserStore = defineStore('user', {
     },
     loadUserFromLocalStorage() {
       const user = localStorage.getItem('user')
-      if (user) {
-        this.user = JSON.parse(user)
+      try {
+        if (user) {
+          this.user = JSON.parse(user)
+        }
+      } catch (error) {
+        console.error('Failed to parse user from localStorage:', error)
+        // Clear invalid user data from localStorage
+        localStorage.removeItem('user')
       }
     },
     async logout() {
       try {
         // Perform any additional logout logic here, such as clearing server-side sessions
-        
+
         // Clear user data and token locally
         this.clearUser()
       } catch (error) {
