@@ -23,7 +23,7 @@
             type="text"
             id="email"
             v-model="email"
-            @blur="validateEmail"
+            rules="email"
             class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter your email"
           />
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import AuthService from '@/services/auth.service'
 
 export default {
   data() {
@@ -120,49 +120,30 @@ export default {
     }
   },
   methods: {
-    validateEmail() {
-      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
-      if (!emailPattern.test(this.email)) {
-        this.emailError = 'Invalid email address.'
-      } else {
-        this.emailError = ''
-      }
-    },
     async handleSubmit() {
       this.clearErrors()
-
-      if (!this.email) {
-        this.emailError = 'Email is required.'
-        return
-      }
-
-      if (this.password !== this.confirmPassword) {
-        this.confirmPasswordError = 'Passwords do not match.'
-        return
-      }
-
       try {
-        const response = await axios.post('http://localhost/api/auth/register', {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-          password_confirmation: this.confirmPassword
-        })
+        // Call AuthService to register user
+        const response = await AuthService.register(
+          this.name,
+          this.email,
+          this.password,
+          this.confirmPassword
+        );
 
-        console.log('Registration successful!', response.data)
-        this.$router.push('/login')
-      } catch (error) {
+        console.log('Registration successful!', response);
+        this.$router.push('/login');
+      }catch (error) {
         if (error.response && error.response.status === 422) {
           const errors = error.response.data
           if (errors.email) {
-            this.emailError = 'Email already exists.'
-          } else if (errors.password) {
-            this.passwordError = 'Password must be at least 6 characters.'
-          } else if (errors.name) {
-            this.nameError = 'Name is required.'
-          } else {
-            this.errorMessage =
-              'An error occurred during registration. Please check your information.'
+            this.emailError = errors.email[0] 
+          } 
+          if (errors.password) {
+            this.passwordError = errors.password[0]
+          }
+          if (errors.name) {
+            this.nameError = errors.name[0]
           }
         } else {
           this.errorMessage = 'An error occurred. Please try again.'
