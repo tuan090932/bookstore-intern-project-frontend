@@ -46,8 +46,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-
+import BookService from '@/services/book.service'
 export default {
   data() {
     return {
@@ -63,24 +62,18 @@ export default {
     }
   },
   mounted() {
-    this.getBookDetails()
+    this.loadBookDetails()
   },
   methods: {
-    getBookDetails() {
-      const bookId = this.$route.params.id
-      axios
-        .get(`http://localhost/api/books/${bookId}`)
-        .then((response) => {
-          if (Object.keys(response.data).length === 0) {
-            this.errorMessage = 'This book does not exist'
-          } else {
-            this.book = response.data
-          }
-        })
-        .catch(() => {
-          this.errorMessage = 'Error fetching book details'
-        })
+    async loadBookDetails() {
+      try {
+        const response = await BookService.getBookDetails(this.$route.params.id)
+        this.book = response
+      } catch (error) {
+        this.errorMessage = 'Failed to load book details'
+      }
     },
+
     formatPrice(price) {
       return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
     }
