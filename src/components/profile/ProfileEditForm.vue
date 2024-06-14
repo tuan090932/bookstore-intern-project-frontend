@@ -62,57 +62,6 @@
       </div>
     </div>
 
-    <!-- Additional Note -->
-    <div class="text-rose-300 text-xs mt-2">
-      Không cần nhập nếu như không muốn thay đổi mật khẩu
-    </div>
-    <!-- Optional: New Password -->
-    <label for="password" class="block text-gray-700 text-sm font-bold mb-2">New Password</label>
-    <div class="relative">
-      <input
-        v-model="form.password"
-        :type="showPassword ? 'text' : 'password'"
-        id="password"
-        name="password"
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="New Password"
-      />
-      <button
-        type="button"
-        @click="showPassword = !showPassword"
-        class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-      >
-        <font-awesome-icon :icon="showPassword ? 'eye-slash' : 'eye'" />
-      </button>
-    </div>
-    <div v-if="errors.passwordError" class="text-red-500 text-xs mt-1">
-      {{ errors.passwordError }}
-    </div>
-
-    <!-- Old Password -->
-    <label for="old_password" class="block text-gray-700 text-sm font-bold mb-2"
-      >Old Password</label
-    >
-    <div class="relative">
-      <input
-        v-model="form.old_password"
-        :type="showOldPassword ? 'text' : 'password'"
-        id="old_password"
-        name="old_password"
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Old Password"
-      />
-      <span
-        class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-        @click="showOldPassword = !showOldPassword"
-      >
-        <font-awesome-icon :icon="showOldPassword ? 'eye-slash' : 'eye'" />
-      </span>
-    </div>
-    <div v-if="errors.oldPasswordError" class="text-red-500 text-xs mt-1">
-      {{ errors.oldPasswordError }}
-    </div>
-
     <!-- Submit and Cancel Buttons -->
     <div class="flex items-center justify-between mt-4">
       <button
@@ -153,12 +102,8 @@ export default {
         name: this.user.name || '',
         user_name: this.user.user_name || '',
         email: this.user.email || '',
-        phone_number: this.user.phone_number || '',
-        password: '',
-        old_password: ''
-      },
-      showPassword: false,
-      showOldPassword: false
+        phone_number: this.user.phone_number || ''
+      }
     }
   },
   methods: {
@@ -169,21 +114,8 @@ export default {
         email: this.form.email,
         phone_number: this.form.phone_number
       }
-      if (this.form.password) {
-        updateData.password = this.form.password
-      }
-      if (this.form.old_password) {
-        updateData.old_password = this.form.old_password
-      }
       this.$emit('update', updateData)
     }
   }
 }
 </script>
-
-<style scoped>
-input[type='password']::-ms-reveal,
-input[type='password']::-ms-clear {
-  display: none;
-}
-</style>

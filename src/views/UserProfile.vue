@@ -3,12 +3,18 @@
     <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
       <h2 class="text-2xl font-bold mb-6 text-gray-900">Profile</h2>
       <div v-if="user">
-        <ProfileInfo v-if="!editing" :user="user" @edit="startEditing" />
+        <ProfileInfo v-if="!editing && !changingPassword" :user="user" @edit="startEditing" @change-password="startChangingPassword"/>
         <ProfileEditForm
-          v-else
+          v-else-if="editing"
           :user="user"
           @cancel="cancelEditing"
           @update="updateUser"
+          :errors="errors"
+        />
+        <ChangePasswordForm
+          v-else
+          @cancel="cancelChangingPassword"
+          @change-password="changePassword"
           :errors="errors"
         />
       </div>
@@ -24,11 +30,13 @@ import { useUserStore } from '@/stores/user'
 import userService from '@/services/user.service'
 import ProfileInfo from '@/components/profile/ProfileInfo.vue'
 import ProfileEditForm from '@/components/profile/ProfileEditForm.vue'
+import ChangePasswordForm from '@/components/auth/ChangePasswordForm.vue'
 
 export default {
   components: {
     ProfileInfo,
-    ProfileEditForm
+    ProfileEditForm,
+    ChangePasswordForm
   },
   computed: {
     user() {
@@ -38,6 +46,7 @@ export default {
   data() {
     return {
       editing: false,
+      changingPassword: false,
       errors: {
         nameError: '',
         emailError: '',
@@ -57,33 +66,33 @@ export default {
       this.editing = false
       this.clearErrors()
     },
+    startChangingPassword() {
+      this.changingPassword = true
+    },
+    cancelChangingPassword() {
+      this.changingPassword = false
+      this.clearErrors()
+    },
     async updateUser(userData) {
       this.clearErrors()
       try {
         const response = await userService.updateUser(this.user.id, userData)
-        useUserStore().setUser(response.data)
+        useUserStore().setUser(response)
         console.log('User updated successfully.')
         this.editing = false
       } catch (error) {
-        if (error.response && error.response.data) {
-          const messages = error.response.data.errors
-          if (error.response.data.old_password) {
-            this.errors.oldPasswordError = error.response.data.old_password
-            console.log('Old password error:', this.errors.oldPasswordError)
-          }
-          this.errors = {
-            nameError: messages.name ? messages.name[0] : '',
-            userNameError: messages.user_name ? messages.user_name[0] : '',
-            emailError: messages.email ? messages.email[0] : '',
-            phoneNumberError: messages.phone_number ? messages.phone_number[0] : '',
-            passwordError: messages.password ? messages.password[0] : '',
-            oldPasswordError: messages.old_password ? messages.old_password[0] : '',
-            generalError: messages.error || ''
-          }
-        } else {
-          this.errors.generalError = 'An unexpected error occurred.'
-        }
-        console.error('An error occurred while updating user information:', error)
+        this.handleError(error)
+      }
+    },
+    async changePassword(passwordData) {
+      this.clearErrors()
+      try {
+        const response = await userService.updateUser(this.user.id, passwordData)
+        useUserStore().setUser(response)
+        console.log('Password updated successfully.')
+        this.changingPassword = false
+      } catch (error) {
+        this.handleError(error)
       }
     },
     clearErrors() {
@@ -96,6 +105,27 @@ export default {
         oldPasswordError: '',
         generalError: ''
       }
+    },
+    handleError(error) {
+      if (error.response && error.response.data) {
+        const messages = error.response.data.errors
+        if (error.response.data.old_password) {
+          this.errors.oldPasswordError = error.response.data.old_password
+          console.log('Old password error:', this.errors.oldPasswordError)
+        }
+        this.errors = {
+          nameError: messages.name ? messages.name[0] : '',
+          userNameError: messages.user_name ? messages.user_name[0] : '',
+          emailError: messages.email ? messages.email[0] : '',
+          phoneNumberError: messages.phone_number ? messages.phone_number[0] : '',
+          passwordError: messages.password ? messages.password[0] : '',
+          oldPasswordError: messages.old_password ? messages.old_password[0] : '',
+          generalError: messages.error || ''
+        }
+      } else {
+        this.errors.generalError = 'An unexpected error occurred.'
+      }
+      console.error('An error occurred:', error)
     }
   }
 }

@@ -7,6 +7,7 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     setUser(user) {
+      console.log('setUser', user);
       this.user = user
       localStorage.setItem('user', JSON.stringify(user))
     },
