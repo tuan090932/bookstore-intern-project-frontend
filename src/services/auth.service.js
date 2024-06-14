@@ -1,5 +1,3 @@
-// auth.service.js
-
 import api from './api.service';
 
 const API_URL = 'auth/';
@@ -11,6 +9,31 @@ class AuthService {
       email,
       password,
       password_confirmation: confirmPassword
+    });
+    return response.data;
+  }
+
+  async login(email, password) {
+    const response = await api.post(API_URL + 'login', {
+      email,
+      password
+    });
+    return response.data;
+  }
+  
+  async logout(token) {
+    await api.post(API_URL + 'logout', {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
+  async getProfile(token) {
+    const response = await api.get(API_URL + 'profile', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
     return response.data;
   }
