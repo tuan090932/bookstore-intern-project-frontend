@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import AuthService from '@/services/auth.service'
 import { useUserStore } from '@/stores/user'
 
 export default {
@@ -104,14 +104,11 @@ export default {
     async handleSubmit() {
       if (this.email && this.password) {
         try {
-          const response = await axios.post('http://localhost/api/auth/login', {
-            email: this.email,
-            password: this.password
-          })
-          const token = response.data.access_token
+          const response = await AuthService.login(this.email, this.password)
+          const token = response.access_token
           this.userStore.setToken(token)
           console.log('Login success!')
-          this.getUserProfile()
+          await this.getUserProfile(token)
           this.$router.push('/profile')
         } catch (error) {
           this.errorMessage = 'Email or password is incorrect'
@@ -120,14 +117,10 @@ export default {
         this.errorMessage = 'Please enter email and password'
       }
     },
-    async getUserProfile() {
+    async getUserProfile(token) {
       try {
-        const response = await axios.get('http://localhost/api/auth/profile', {
-          headers: {
-            Authorization: `Bearer ${this.userStore.token}`
-          }
-        })
-        this.userStore.setUser(response.data)
+        const user = await AuthService.getProfile(token)
+        this.userStore.setUser(user)
       } catch (error) {
         console.error('Failed to fetch user profile:', error)
       }
