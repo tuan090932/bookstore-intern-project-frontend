@@ -77,6 +77,7 @@ export default {
             emailError: messages.email ? messages.email[0] : '',
             phoneNumberError: messages.phone_number ? messages.phone_number[0] : '',
             passwordError: messages.password ? messages.password[0] : '',
+            oldPasswordError: messages.old_password ? messages.old_password[0] : '',
             generalError: messages.error || ''
           }
         } else {
