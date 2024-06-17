@@ -6,7 +6,6 @@
         {{ errorMessage }}
       </div>
       <form @submit.prevent="handleSubmit">
-
         <!-- Email -->
         <div class="mb-4">
           <label for="email" class="block text-sm font-medium text-gray-700 mb-2"
@@ -111,6 +110,7 @@ export default {
           await this.getUserProfile(token)
           this.$router.push('/profile')
         } catch (error) {
+          console.error('Failed to login:', error)
           this.errorMessage = 'Email or password is incorrect'
         }
       } else {
@@ -125,7 +125,7 @@ export default {
         console.error('Failed to fetch user profile:', error)
       }
     }
-  },
+  }
 }
 </script>
 
