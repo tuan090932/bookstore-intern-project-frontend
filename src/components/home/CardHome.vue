@@ -10,24 +10,28 @@
           :key="book.id"
           class="rounded-lg overflow-hidden shadow-lg ring-1 ring-stone-400 ring-opacity-40"
         >
-          <div class="relative">
-            <img class="w-full" :src="book.image" alt="Product Image" />
-            <div
-              class="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 m-2 rounded-md text-sm font-medium"
-            >
-              SALE
+          <router-link :to="{ name: 'bookDetail', params: { id: book.book_id } }">
+            <div class="relative">
+              <img class="w-full" :src="book.image" alt="Product Image" />
+              <div
+                class="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 m-2 rounded-md text-sm font-medium"
+              >
+                SALE
+              </div>
             </div>
-          </div>
-          <div class="p-4">
-            <h3 class="text-lg font-medium mb-2">{{ book.title }}</h3>
-            <p class="text-gray-600 text-sm mb-4">{{ book.description }}</p>
-            <div class="flex books-center justify-between">
-              <span class="font-bold text-lg">{{ book.price }}</span>
-              <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                Buy Now
-              </button>
+            <div class="p-4">
+              <h3 class="text-lg font-medium mb-2">{{ book.title }}</h3>
+              <p class="text-gray-600 text-sm mb-4">{{ book.description }}</p>
+              <div class="flex books-center justify-between">
+                <span class="font-bold text-lg">{{ book.price }}</span>
+                <button
+                  class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                >
+                  Buy Now
+                </button>
+              </div>
             </div>
-          </div>
+          </router-link>
         </div>
       </div>
     </div>
