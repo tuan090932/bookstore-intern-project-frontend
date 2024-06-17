@@ -110,7 +110,6 @@ export default {
           await this.getUserProfile(token)
           this.$router.push('/profile')
         } catch (error) {
-          console.error('Failed to login:', error)
           this.errorMessage = 'Email or password is incorrect'
         }
       } else {
