@@ -23,10 +23,8 @@
         >
           <router-link to="/">Home</router-link>
         </li>
-        <li
-          class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer"
-        >
-          <router-link to="/products">Products</router-link>
+        <li>
+          <CategoryDropdown />
         </li>
         <li
           class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer"
@@ -75,9 +73,12 @@ import { useUserStore } from '@/stores/user'
 import LogoutButton from '@/components/auth/LogoutButton.vue'
 import { ref, onMounted } from 'vue'
 import { watch } from 'vue'
+import CategoryDropdown from '@/components/category/CategoryDropdown.vue'
+
 export default {
   components: {
-    LogoutButton
+    LogoutButton,
+    CategoryDropdown
   },
   setup() {
     const userStore = useUserStore()

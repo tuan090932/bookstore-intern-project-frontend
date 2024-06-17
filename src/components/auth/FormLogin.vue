@@ -6,7 +6,6 @@
         {{ errorMessage }}
       </div>
       <form @submit.prevent="handleSubmit">
-
         <!-- Email -->
         <div class="mb-4">
           <label for="email" class="block text-sm font-medium text-gray-700 mb-2"
@@ -125,7 +124,7 @@ export default {
         console.error('Failed to fetch user profile:', error)
       }
     }
-  },
+  }
 }
 </script>
 
