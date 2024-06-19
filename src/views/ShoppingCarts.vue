@@ -4,7 +4,7 @@
       <!-- Header name -->
       <h1 class="fw-[600] text-center text-[26px] lg:text-[35px] mb-[20px]">Giỏ hàng</h1>
 
-      <!-- Thanh header giỏ hàng -->
+      <!-- Header shopping carts -->
       <div
         class="mb-[12px] px-[20px] shadow text-[18px] text-blue-500 font-bold h-[55px] shadow items-center hidden lg:flex justify-center bg-[#fff]"
       >
@@ -48,13 +48,15 @@
                   <img class="object-cover h-full" :src="item.image" :alt="item.title" />
                 </div>
                 <div class="ml-3 flex justify-between px-2 lg:px-0 flex-col gap-y-[3px]">
-                  <span class="lg:text-[18px] font-semibold md:max-w-[250px] line-clamp-2">{{ item.title }}</span>
+                  <span class="lg:text-[18px] font-semibold md:max-w-[250px] line-clamp-2">{{
+                    item.title
+                  }}</span>
                   <span class="lg:text-[14px]"
                     >Phân loại:
                     <span class="lg:text-[16px]">{{ item.category }}</span>
                   </span>
                   <div class="color-orange md:hidden font-semibold">
-                    <span class="amount">{{ item.price }}</span
+                    <span class="amount">{{ $filters.formatNumber(item.price * item.quantity) }}</span
                     >đ
                   </div>
                 </div>
@@ -63,42 +65,36 @@
             <div
               class="hidden text-center lg:flex items-center justify-center color-orange font-semibold w-[12.5%]"
             >
-              <span class="rate text">{{ item.price }}</span
+              <span class="rate text">{{ $filters.formatNumber(item.price) }}</span
               >đ
             </div>
 
             <div
               class="text-center lg:w-[12.5%] pl-[158px] pr-[30px] md:px-[45px] flex justify-center text-[16px] my-[7px]"
             >
-              <a
-                class="flex minus-btn justify-center items-center border border-r-0 border-[rgba(0,0,0,0.09)] aspect-square w-[32px] h-[32px]"
-              >
-                -
-              </a>
               <input
-                :value="item.quantity"
-                class="num text-center w-[45px] border border-[rgba(0,0,0,0.09)]"
+                class="num text-center w-[75px] border border-[rgba(0,0,0,0.3)]"
                 type="number"
-                min="0"
+                min="1"
+                v-model="item.quantity"
               />
-              <a
-                class="plus-btn flex justify-center items-center border-l-0 border border-[rgba(0,0,0,0.09)] aspect-square w-[32px] h-[32px]"
-              >
-                +
-              </a>
             </div>
             <div
               class="hidden text-center lg:flex items-center justify-center color-orange font-semibold w-[12.5%]"
             >
-              <span class="amount">{{ item.price * item.quantity }}</span
+              <span class="amount">{{ $filters.formatNumber(item.price * item.quantity) }}</span
               >đ
             </div>
-            <a href="" class="p-4 text-center text-red-500 lg:w-[12.5%] hover:font-bold"> Xóa </a>
+            <button
+              class="p-4 text-center text-red-500 lg:w-[12.5%] hover:font-bold hover:underline"
+            >
+              Xóa
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- Thanh toán -->
+      <!-- Total -->
       <div
         class="sticky bottom-0 bg-[#fff] border-dotted border-[rgba(0,0,0,.09)] lg:border lg:py-2 lg:pr-6 lg:pl-[40px] pl-[10px] my-4 flex items-center justify-between"
       >
@@ -111,7 +107,8 @@
           <div class="flex text-[30px] gap-x-2 items-center">
             <div class="text-[14px] lg:text-[16px]">Tổng thanh toán:</div>
             <span class="text-[18px] lg:text-[24px] text-blue-500 font-semibold">
-              <span class="sum-cart">3,000,000</span>đ
+              <span class="sum-cart">{{ $filters.formatNumber(totalSum) }}</span
+              >đ
             </span>
           </div>
           <button
@@ -159,10 +156,19 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+    // Compute the total price for each item in the cart
+    // by multiplying the quantity with the price
+    cartItemTotalPrice() {
+      return this.cartItems.map((item) => item.price * item.quantity)
+    },
+    // Compute the total sum of all cart item total prices
+    totalSum() {
+      return this.cartItemTotalPrice.reduce((acc, current) => acc + current, 0)
+    }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
