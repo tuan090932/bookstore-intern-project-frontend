@@ -1,4 +1,5 @@
 <template>
+  <!-- views/UserProfile.vue -->
   <div class="min-h-screen flex items-center justify-center bg-gray-100">
     <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
       <h2 class="text-2xl font-bold mb-6 text-gray-900">Profile</h2>
@@ -75,8 +76,9 @@ export default {
     },
     async updateUser(userData) {
       this.clearErrors()
+      console.log(this.user, userData);
       try {
-        const response = await userService.updateUser(this.user.id, userData)
+        const response = await userService.updateUser(this.user.user_id, userData)
         useUserStore().setUser(response)
         console.log('User updated successfully.')
         this.editing = false
@@ -87,7 +89,7 @@ export default {
     async changePassword(passwordData) {
       this.clearErrors()
       try {
-        const response = await userService.updateUser(this.user.id, passwordData)
+        const response = await userService.updateUser(this.user.user_id, passwordData)
         useUserStore().setUser(response)
         console.log('Password updated successfully.')
         this.changingPassword = false
@@ -122,6 +124,7 @@ export default {
           oldPasswordError: messages.old_password ? messages.old_password[0] : '',
           generalError: messages.error || ''
         }
+        console.log('Error messages:', this.errors);
       } else {
         this.errors.generalError = 'An unexpected error occurred.'
       }

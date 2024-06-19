@@ -1,4 +1,5 @@
 <template>
+  <!-- components/profile/ProfileInfo.vue -->
   <div>
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2">Name</label>
@@ -50,6 +51,9 @@ export default {
   props: {
     user: {
       type: Object,
+
+
+  
       required: true
     }
   }

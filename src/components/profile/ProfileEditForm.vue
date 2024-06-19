@@ -1,65 +1,68 @@
 <template>
-  <form @submit.prevent="handleUpdate">
+  <ValidationForm @submit="handleUpdate">
     <!-- Name -->
     <div class="mb-4">
       <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
-      <input
-        v-model="form.name"
+      <Field
+        name="name"
         type="text"
         id="name"
-        name="name"
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         placeholder="Name"
+        rules="required|min:3|max:50"
+        v-model="form.name"
       />
-      <div v-if="errors.nameError" class="text-red-500 text-xs mt-1">{{ errors.nameError }}</div>
+      <ErrorMessage name="name" class="text-red-500 text-xs mt-1"/>
+      <div v-if="errors.nameError" class="mt-4 text-red-500">{{ errors.nameError}}</div>
+
     </div>
 
     <!-- User Name -->
     <div class="mb-4">
       <label for="user_name" class="block text-gray-700 text-sm font-bold mb-2">User Name</label>
-      <input
-        v-model="form.user_name"
+      <Field
+        name="user_name"
         type="text"
         id="user_name"
-        name="user_name"
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         placeholder="User Name"
+        rules="required|min:3|max:50"
+        v-model="form.user_name"
       />
-      <div v-if="errors.userNameError" class="text-red-500 text-xs mt-1">
-        {{ errors.userNameError }}
-      </div>
+      <ErrorMessage name="user_name" class="text-red-500 text-xs mt-1"/>
+      <div v-if="errors.userNameError" class="mt-4 text-red-500">{{ errors.userNameError }}</div>
     </div>
 
     <!-- Email -->
     <div class="mb-4">
       <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-      <input
-        v-model="form.email"
+      <Field
+        name="email"
         type="email"
         id="email"
-        name="email"
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         placeholder="Email"
+        rules="required|email|max:50"
+        v-model="form.email"
       />
-      <div v-if="errors.emailError" class="text-red-500 text-xs mt-1">{{ errors.emailError }}</div>
+      <ErrorMessage name="email" class="text-red-500 text-xs mt-1"/>
+      <div v-if="errors.emailError" class="mt-4 text-red-500">{{ errors.emailError }}</div>
     </div>
 
     <!-- Phone Number -->
     <div class="mb-4">
-      <label for="phone_number" class="block text-gray-700 text-sm font-bold mb-2"
-        >Phone Number</label
-      >
-      <input
-        v-model="form.phone_number"
+      <label for="phone_number" class="block text-gray-700 text-sm font-bold mb-2">Phone Number</label>
+      <Field
+        name="phone_number"
         type="text"
         id="phone_number"
-        name="phone_number"
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         placeholder="Phone Number"
+        rules="required|numeric|min:10|max:11"
+        v-model="form.phone_number"
       />
-      <div v-if="errors.phoneNumberError" class="text-red-500 text-xs mt-1">
-        {{ errors.phoneNumberError }}
-      </div>
+      <ErrorMessage name="phone_number" class="text-red-500 text-xs mt-1"/>
+      <div v-if="errors.phoneNumberError" class="mt-4 text-red-500">{{ errors.phoneNumberError }} </div>
     </div>
 
     <!-- Submit and Cancel Buttons -->
@@ -81,7 +84,7 @@
 
     <!-- General Error -->
     <div v-if="errors.generalError" class="mt-4 text-red-500">{{ errors.generalError }}</div>
-  </form>
+  </ValidationForm>
 </template>
 
 <script>
@@ -107,12 +110,12 @@ export default {
     }
   },
   methods: {
-    handleUpdate() {
+    handleUpdate(values) {
       const updateData = {
-        name: this.form.name,
-        user_name: this.form.user_name,
-        email: this.form.email,
-        phone_number: this.form.phone_number
+        name: values.name,
+        user_name: values.user_name,
+        email: values.email,
+        phone_number: values.phone_number
       }
       this.$emit('update', updateData)
     }
