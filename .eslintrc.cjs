@@ -10,5 +10,9 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 'latest'
-  }
+  },
+  rules: {
+    // Các quy tắc khác
+    'vue/multi-word-component-names': 'off',
+  },
 }

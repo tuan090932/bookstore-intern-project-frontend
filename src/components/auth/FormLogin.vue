@@ -6,6 +6,7 @@
         {{ errorMessage }}
       </div>
       <form @submit.prevent="handleSubmit">
+        <!-- Email -->
         <div class="mb-4">
           <label for="email" class="block text-sm font-medium text-gray-700 mb-2"
             >Email Address</label
@@ -19,6 +20,8 @@
             required
           />
         </div>
+
+        <!-- Password -->
         <div class="mb-4 relative">
           <label for="password" class="block text-sm font-medium text-gray-700 mb-2"
             >Password</label
@@ -44,6 +47,8 @@
             >Forgot Password?</a
           >
         </div>
+
+        <!-- Remember me -->
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center">
             <input
@@ -54,12 +59,14 @@
             />
             <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
           </div>
-          <a
-            href="#"
+          <router-link
+            to="/register"
             class="text-xs text-indigo-500 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >Create Account</a
+            >Create Account</router-link
           >
         </div>
+
+        <!-- Login Button -->
         <button
           type="submit"
           class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -72,7 +79,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import AuthService from '@/services/auth.service'
+import { useUserStore } from '@/stores/user'
 
 export default {
   data() {
@@ -83,29 +91,37 @@ export default {
       errorMessage: ''
     }
   },
+  computed: {
+    userStore() {
+      return useUserStore()
+    }
+  },
   methods: {
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword
     },
-    handleSubmit() {
+    async handleSubmit() {
       if (this.email && this.password) {
-        axios
-          .post('http://localhost/api/auth/login', {
-            email: this.email,
-            password: this.password
-          })
-          .then((response) => {
-            const token = response.data.access_token
-            localStorage.setItem('access_token', token)
-            console.log('Login success!')
-            this.getUserProfile()
-            this.$router.push('/profile')
-          })
-          .catch(() => {
-            this.errorMessage = 'Email or password is incorrect'
-          })
+        try {
+          const response = await AuthService.login(this.email, this.password)
+          const token = response.access_token
+          this.userStore.setToken(token)
+          console.log('Login success!')
+          await this.getUserProfile(token)
+          this.$router.push('/profile')
+        } catch (error) {
+          this.errorMessage = 'Email or password is incorrect'
+        }
       } else {
         this.errorMessage = 'Please enter email and password'
+      }
+    },
+    async getUserProfile(token) {
+      try {
+        const user = await AuthService.getProfile(token)
+        this.userStore.setUser(user)
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error)
       }
     }
   }
