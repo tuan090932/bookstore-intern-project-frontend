@@ -31,7 +31,7 @@ const router = createRouter({
     {
       path: '/cart',
       name: 'shopping-carts',
-      component: () => import('@/views/ShoppingCarts.vue')
+      component: () => import('@/views/CartView.vue')
     },
     {
       path: '/:catchAll(.*)',

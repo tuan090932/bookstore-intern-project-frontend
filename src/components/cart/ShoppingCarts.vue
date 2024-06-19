@@ -29,7 +29,7 @@
         <div class="w-[calc(100%-58px)] lg:w-[calc(50%-58px)]">Sản phẩm</div>
         <div class="text-center w-[12.5%]">Đơn giá</div>
         <div class="text-center w-[12.5%]">Số lượng</div>
-        <div class="text-center w-[12.5%]">Số tiền</div>
+        <div class="text-center w-[12.5%]">Thành tiền</div>
         <div class="text-center w-[12.5%]">Thao tác</div>
       </div>
 
@@ -56,7 +56,9 @@
                     <span class="lg:text-[16px]">{{ item.category }}</span>
                   </span>
                   <div class="color-orange md:hidden font-semibold">
-                    <span class="amount">{{ $filters.formatNumber(item.price * item.quantity) }}</span
+                    <span class="amount">{{
+                      $filters.formatNumber(item.price * item.quantity)
+                    }}</span
                     >đ
                   </div>
                 </div>
