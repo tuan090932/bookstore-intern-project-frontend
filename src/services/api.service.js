@@ -6,15 +6,15 @@ const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json'
-    // Thêm các header mặc định khác ở đây
+    // Add any other headers here
   }
 })
 
-// Tùy chọn: Thêm interceptor để xử lý lỗi toàn cục
+// Add a request interceptor
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Xử lý lỗi toàn cục ở đây
+    // Handle errors
     return Promise.reject(error)
   }
 )

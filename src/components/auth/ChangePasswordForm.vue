@@ -54,7 +54,6 @@
           placeholder="Confirm New Password"
           rules="confirmed:@password"
           v-model="form.password_confirmation"
-          @input="abc()"
         />
         <button type="button" @click="togglePasswordConfirmation" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
           <font-awesome-icon :icon="showPasswordConfirmation ? 'eye-slash' : 'eye'" />
@@ -113,9 +112,6 @@ export default {
         password_confirmation: values.password_confirmation 
       }
       this.$emit('change-password', passwordData)
-    },
-    abc(){
-      console.log(this.form.password_confirmation, this.form.password)
     },
     toggleOldPassword() {
       this.showOldPassword = !this.showOldPassword;

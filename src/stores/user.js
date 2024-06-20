@@ -7,7 +7,6 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     setUser(user) {
-      console.log('setUser', user);
       this.user = user
       localStorage.setItem('user', JSON.stringify(user))
     },
@@ -35,8 +34,6 @@ export const useUserStore = defineStore('user', {
     },
     async logout() {
       try {
-        // Perform any additional logout logic here, such as clearing server-side sessions
-
         // Clear user data and token locally
         this.clearUser()
       } catch (error) {

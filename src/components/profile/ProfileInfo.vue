@@ -6,7 +6,7 @@
       <p
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       >
-        {{ user.name || 'chưa khai báo' }}
+        {{ user.name || 'Not yet declared ...' }}
       </p>
     </div>
     <div class="mb-4">
@@ -14,7 +14,7 @@
       <p
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       >
-        {{ user.user_name || 'chưa khai báo' }}
+        {{ user.user_name || 'Not yet declared ...' }}
       </p>
     </div>
     <div class="mb-4">
@@ -22,7 +22,7 @@
       <p
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       >
-        {{ user.email || 'chưa khai báo' }}
+        {{ user.email || 'Not yet declared ...' }}
       </p>
     </div>
     <div class="mb-4">
@@ -30,7 +30,7 @@
       <p
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       >
-        {{ user.phone_number || 'chưa khai báo' }}
+        {{ user.phone_number || 'Not yet declared ...' }}
       </p>
     </div>
     <button
