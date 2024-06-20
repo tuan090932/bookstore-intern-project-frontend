@@ -16,7 +16,7 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'profile',
-      component: () => import('@/components/auth/ViewProfile.vue')
+      component: () => import('@/views/UserProfile.vue')
     },
     {
       path: '/register',
