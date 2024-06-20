@@ -1,0 +1,86 @@
+<template>
+  <div class="bg-gray-100 dark:bg-gray-800 py-8">
+    <div v-if="errorMessage" class="text-red-500 text-center mb-4">{{ errorMessage }}</div>
+    <div v-else>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="px-4">
+          <div class="rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+            <img class="w-full h-full object-cover" :src="book.image" alt="Product Image" />
+          </div>
+          <div class="grid grid-cols-1 mb-4">
+            <div>
+              <button
+                class="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-4">
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">{{ book.title }}</h2>
+
+          <div class="mb-4">
+            <div class="mb-2 flex">
+              <span class="font-bold text-gray-700 dark:text-gray-300">Price:</span>
+              <p class="text-gray-600 dark:text-gray-300">{{ formatPrice(book.price) }}</p>
+            </div>
+            <div class="mb-2 flex">
+              <span class="font-bold text-gray-700 dark:text-gray-300">Stock:</span>
+              <p class="text-gray-600 dark:text-gray-300">{{ book.stock }}</p>
+            </div>
+            <div class="mb-2 flex">
+              <span class="font-bold text-gray-700 dark:text-gray-300">Number of Pages:</span>
+              <p class="text-gray-600 dark:text-gray-300">{{ book.num_pages }}</p>
+            </div>
+          </div>
+          <div>
+            <span class="font-bold text-gray-700 dark:text-gray-300">Product Description:</span>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">{{ book.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import BookService from '@/services/book.service'
+export default {
+  data() {
+    return {
+      book: {
+        title: '',
+        description: '',
+        image: '',
+        price: 0,
+        stock: 0,
+        num_pages: 0
+      },
+      errorMessage: ''
+    }
+  },
+  mounted() {
+    this.loadBookDetails()
+  },
+  methods: {
+    async loadBookDetails() {
+      try {
+        const response = await BookService.getBookDetails(this.$route.params.id)
+        this.book = response
+      } catch (error) {
+        this.errorMessage = 'Failed to load book details'
+      }
+    },
+
+    formatPrice(price) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+    }
+  }
+}
+</script>
+
+<style scoped>
+/* Add any specific CSS styles if needed */
+</style>
