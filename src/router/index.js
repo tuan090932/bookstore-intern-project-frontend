@@ -32,6 +32,11 @@ const router = createRouter({
       path: '/:catchAll(.*)',
       name: 'notFound',
       component: () => import('@/components/NotFound.vue')
+    },
+    {
+      path: '/book/:id',
+      name: 'bookDetail',
+      component: () => import('@/views/BookDetail.vue')
     }
   ]
 })
