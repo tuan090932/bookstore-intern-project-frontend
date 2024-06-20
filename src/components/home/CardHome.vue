@@ -25,7 +25,7 @@
               <div class="flex books-center justify-between">
                 <span class="font-bold text-lg">{{ book.price }}</span>
                 <button
-                  class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                  class="bg-blue-500 hover:bg-blue-200 text-white font-bold py-2 px-4 rounded"
                 >
                   Buy Now
                 </button>
@@ -38,25 +38,25 @@
       <!-- Pagination Controls -->
       <div class="flex justify-center mt-8">
         <button
-          class="bg-gray-300 hover:bg-blue-600 text-gray-800 font-bold py-2 px-4 rounded-l"
+          class="bg-gray-100 hover:bg-blue-200 text-gray-800 font-bold py-2 px-4 rounded-l"
           :disabled="currentPage === 1"
           @click="goToFirstPage"
         >
-          First
+          <font-awesome-icon :icon="['fas', 'angles-left']" />
         </button>
         <button
-          class="bg-gray-300 hover:bg-blue-600 text-gray-800 font-bold py-2 px-4"
+          class="bg-gray-100 hover:bg-blue-200 text-gray-800 font-bold py-2 px-4"
           :disabled="currentPage === 1"
           @click="goToPreviousPage"
         >
-          Previous
+          <font-awesome-icon :icon="['fas', 'angle-left']" />
         </button>
 
         <!-- Page numbers -->
         <template v-for="page in totalPages" :key="page">
           <button
             v-if="isWithinRange(page)"
-            class="bg-gray-300 hover:bg-blue-600 text-white font-bold py-2 px-4 {{ currentPage === page ? 'bg-gray-600' : '' }}"
+            :class="['bg-gray-100 hover:bg-blue-200 font-bold py-2 px-4', { 'bg-blue-200': currentPage === page }]"
             @click="goToPage(page)"
           >
             {{ page }}
@@ -64,18 +64,18 @@
         </template>
 
         <button
-          class="bg-gray-300 hover:bg-blue-600 text-gray-800 font-bold py-2 px-4"
+          class="bg-gray-100 hover:bg-blue-200 text-gray-800 font-bold py-2 px-4"
           :disabled="currentPage === totalPages"
           @click="goToNextPage"
         >
-          Next
+          <font-awesome-icon :icon="['fas', 'chevron-right']" />
         </button>
         <button
-          class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
+          class="bg-gray-100 hover:bg-blue-200 text-gray-800 font-bold py-2 px-4 rounded-r"
           :disabled="currentPage === totalPages"
           @click="goToLastPage"
         >
-          Last
+          <font-awesome-icon :icon="['fas', 'angles-right']" />
         </button>
       </div>
     </div>
@@ -112,7 +112,6 @@ export default {
         })
         .catch((error) => {
           console.error('Error fetching books:', error);
-          this.errorMessage = 'Error fetching books';
         });
     },
 

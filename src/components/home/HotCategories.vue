@@ -42,7 +42,6 @@ export default {
         this.categories = await CategoryService.getAllCategories();
       } catch (error) {
         console.error('Error fetching categories:', error);
-        this.errorMessage = 'Error fetching categories';
       }
     }
   }
