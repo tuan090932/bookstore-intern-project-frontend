@@ -51,6 +51,7 @@ router.beforeEach((to, from, next) => {
   const authRequired = !publicPages.includes(to.path)
   const userStore = useUserStore()
   if (authRequired && !userStore.token) {
+    alert('You are not authorized to access this or session has ended. Please log in again.')
     return next({ path: '/login', query: { returnUrl: to.fullPath } })
   }
   next()
