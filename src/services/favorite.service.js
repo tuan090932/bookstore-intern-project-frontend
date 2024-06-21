@@ -1,6 +1,7 @@
 import api from './api.service';
 import { useUserStore } from '@/stores/user'; 
 import router from '@/router';
+
 const API_URL = 'favorite/';
 
 class FavoriteService {
@@ -12,12 +13,9 @@ class FavoriteService {
       router.push('/login');
       return;
     }
-    return api.post(`${API_URL}`, { book_id: bookId }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-    });
+    return api.post(`${API_URL}`, { book_id: bookId });
   }
+
   getFavorites() {
     const userStore = useUserStore(); 
     const token = userStore.token; 
@@ -26,11 +24,7 @@ class FavoriteService {
         router.push('/login');
         return;
       }
-    return api.get(`${API_URL}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-    });
+    return api.get(`${API_URL}`);
   }
 
   deleteFavorite(favoriteId) {
@@ -41,11 +35,7 @@ class FavoriteService {
         router.push('/login');
         return;
       }
-    return api.delete(`${API_URL}${favoriteId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-    });
+    return api.delete(`${API_URL}${favoriteId}`);
   }
 }
 
