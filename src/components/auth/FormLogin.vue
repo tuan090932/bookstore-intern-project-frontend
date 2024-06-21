@@ -6,17 +6,17 @@
         {{ errorMessage }}
       </div>
       <form @submit.prevent="handleSubmit">
-        <!-- Email -->
+        <!-- Email or Username -->
         <div class="mb-4">
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-2"
-            >Email Address</label
+          <label for="emailOrUsername" class="block text-sm font-medium text-gray-700 mb-2"
+            >Email Address or Username</label
           >
           <input
-            v-model="email"
-            type="email"
-            id="email"
+            v-model="emailOrUsername"
+            type="text"
+            id="emailOrUsername"
             class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="your@email.com"
+            placeholder="your@email.com or username"
             required
           />
         </div>
@@ -85,7 +85,7 @@ import { useUserStore } from '@/stores/user'
 export default {
   data() {
     return {
-      email: '',
+      emailOrUsername: '',
       password: '',
       showPassword: false,
       errorMessage: ''
@@ -101,19 +101,19 @@ export default {
       this.showPassword = !this.showPassword
     },
     async handleSubmit() {
-      if (this.email && this.password) {
+      if (this.emailOrUsername && this.password) {
         try {
-          const response = await AuthService.login(this.email, this.password)
+          const response = await AuthService.login(this.emailOrUsername, this.password)
           const token = response.access_token
           this.userStore.setToken(token)
           console.log('Login success!')
           await this.getUserProfile(token)
           this.$router.push('/profile')
         } catch (error) {
-          this.errorMessage = 'Email or password is incorrect'
+          this.errorMessage = 'Email or username and password is incorrect'
         }
       } else {
-        this.errorMessage = 'Please enter email and password'
+        this.errorMessage = 'Please enter email or username and password'
       }
     },
     async getUserProfile(token) {
