@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import HomeView from '../views/HomeView.vue'
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -42,18 +41,13 @@ const router = createRouter({
     }
   ]
 })
-
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/register', '/about', '/', '/book/:id'] // Các trang không yêu cầu đăng nhập
+  const publicPages = ['/login', '/register', '/about', '/', '/book/:id']
   const authRequired = !publicPages.includes(to.path)
   const userStore = useUserStore()
-
   if (authRequired && !userStore.token) {
-    // Chuyển hướng đến trang đăng nhập nếu người dùng chưa đăng nhập
     return next({ path: '/login', query: { returnUrl: to.fullPath } })
   }
-
   next()
 })
-
 export default router
