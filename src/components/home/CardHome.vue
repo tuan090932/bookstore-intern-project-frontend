@@ -27,7 +27,7 @@
             </div>
             <div class="flex items-center justify-between mb-4">
               <span class="font-bold text-lg">{{ book.price }}</span>
-              <IconAddFavorite :bookId="book.book_id" />
+              <IconAddFavorite :bookId="book.book_id" :favorites="favorites" @updateFavorites="updateFavorites" />
             </div>
             <div class="flex justify-between space-x-2 text-sm">
               <button class="bg-blue-500 hover:bg-blue-200 text-white py-1 rounded w-full">
@@ -90,6 +90,7 @@
 
 <script>
 import bookService from '@/services/book.service';
+import favoriteService from '@/services/favorite.service';
 import IconAddFavorite from '@/components/favorite/IconAddFavorite.vue';
 
 export default {
@@ -97,6 +98,7 @@ export default {
     return {
       allBooks: [], 
       books: [], 
+      favorites: [], 
       errorMessage: '',
       perPage: 10, 
       currentPage: 1, 
@@ -108,6 +110,7 @@ export default {
   },
   mounted() {
     this.getBooks();
+    this.fetchFavorites(); // Change to fetchFavorites to update favorites on mount
   },
   methods: {
     /**
@@ -126,12 +129,36 @@ export default {
     },
 
     /**
+     * Fetch favorites for the authenticated user
+     */
+    fetchFavorites() {
+      favoriteService.getFavorites()
+        .then((response) => {
+          this.favorites = response.data.favorites;
+          // After fetching favorites, update books with correct favorite status
+          this.updateBooksWithFavorites();
+        })
+        .catch((error) => {
+          console.error('Error fetching favorites:', error);
+        });
+    },
+
+    /**
      * Update the list of books to display on the current page
      */
     updatePagedBooks() {
       const startIndex = (this.currentPage - 1) * this.perPage;
       const endIndex = startIndex + this.perPage;
       this.books = this.allBooks.slice(startIndex, endIndex);
+    },
+
+    /**
+     * Update books with correct favorite status
+     */
+    updateBooksWithFavorites() {
+      this.books.forEach(book => {
+        book.isFavorite = this.favorites.some(fav => fav.book_id === book.book_id);
+      });
     },
 
     /**
@@ -185,13 +212,17 @@ export default {
     goToPage(page) {
       this.currentPage = page;
       this.updatePagedBooks();
+    },
+
+    /**
+     * Update favorites after a change
+     */
+    updateFavorites() {
+      this.fetchFavorites(); // Update favorites after adding or removing a favorite
     }
   }
 };
 </script>
 
 <style scoped>
-/* CSS để giới hạn chiều dài tiêu đề và mô tả */
-
-/* Thêm các CSS khác nếu cần */
 </style>

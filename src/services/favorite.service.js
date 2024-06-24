@@ -17,13 +17,6 @@ class FavoriteService {
   }
 
   getFavorites() {
-    const userStore = useUserStore(); 
-    const token = userStore.token; 
-    if (!token) {
-        alert('Please login to view favorite');
-        router.push('/login');
-        return;
-      }
     return api.get(`${API_URL}`);
   }
 
