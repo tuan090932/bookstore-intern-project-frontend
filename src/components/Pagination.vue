@@ -18,7 +18,7 @@
     <template v-for="page in totalPages" :key="page">
       <button
         v-if="isWithinRange(page)"
-        :class="['bg-gray-100 hover:bg-blue-200 font-bold py-2 px-4', { 'bg-blue-200': currentPage === page }]"
+        :class="['bg-gray-100 hover:bg-blue-200 font-bold py-2 px-4', { 'bg-cyan-200': currentPage == page }]"
         @click="goToPage(page)"
       >
         {{ page }}
