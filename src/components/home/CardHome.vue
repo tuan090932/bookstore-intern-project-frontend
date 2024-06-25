@@ -42,183 +42,63 @@
       </div>
 
       <!-- Pagination Controls -->
-      <div class="flex justify-center mt-8">
-        <button
-          class="bg-gray-100 hover:bg-blue-200 text-gray-800 font-bold py-2 px-4 rounded-l"
-          :disabled="currentPage === 1"
-          @click="goToFirstPage"
-        >
-          <font-awesome-icon :icon="['fas', 'angles-left']" />
-        </button>
-        <button
-          class="bg-gray-100 hover:bg-blue-200 text-gray-800 font-bold py-2 px-4"
-          :disabled="currentPage === 1"
-          @click="goToPreviousPage"
-        >
-          <font-awesome-icon :icon="['fas', 'angle-left']" />
-        </button>
-
-        <!-- Page numbers -->
-        <template v-for="page in totalPages" :key="page">
-          <button
-            v-if="isWithinRange(page)"
-            :class="['bg-gray-100 hover:bg-blue-200 font-bold py-2 px-4', { 'bg-blue-200': currentPage === page }]"
-            @click="goToPage(page)"
-          >
-            {{ page }}
-          </button>
-        </template>
-
-        <button
-          class="bg-gray-100 hover:bg-blue-200 text-gray-800 font-bold py-2 px-4"
-          :disabled="currentPage === totalPages"
-          @click="goToNextPage"
-        >
-          <font-awesome-icon :icon="['fas', 'chevron-right']" />
-        </button>
-        <button
-          class="bg-gray-100 hover:bg-blue-200 text-gray-800 font-bold py-2 px-4 rounded-r"
-          :disabled="currentPage === totalPages"
-          @click="goToLastPage"
-        >
-          <font-awesome-icon :icon="['fas', 'angles-right']" />
-        </button>
-      </div>
+      <Pagination
+        :allElements="allBooks"
+        :perPage="10"
+        @updateElements="updateElements"
+      />
     </div>
   </div>
-</template>
+</template> 
 
 <script>
 import bookService from '@/services/book.service';
 import favoriteService from '@/services/favorite.service';
 import IconAddFavorite from '@/components/favorite/IconAddFavorite.vue';
+import Pagination from '@/components/Pagination.vue'; // Import the Pagination component
 
 export default {
   data() {
     return {
-      allBooks: [], 
-      books: [], 
-      favorites: [], 
+      allBooks: [],
+      books: [],
+      favorites: [],
       errorMessage: '',
-      perPage: 10, 
-      currentPage: 1, 
-      totalPages: 0 
     };
   },
   components: {
-    IconAddFavorite
+    IconAddFavorite,
+    Pagination // Register the Pagination component
   },
   mounted() {
     this.getBooks();
-    this.fetchFavorites(); // Change to fetchFavorites to update favorites on mount
+    this.fetchFavorites();
   },
   methods: {
-    /**
-     * Get all books from the server
-     */
     getBooks() {
       bookService.getAllBooks()
         .then((response) => {
           this.allBooks = response;
-          this.totalPages = Math.ceil(this.allBooks.length / this.perPage);
-          this.updatePagedBooks();
         })
         .catch((error) => {
           console.error('Error fetching books:', error);
         });
     },
-
-    /**
-     * Fetch favorites for the authenticated user
-     */
     fetchFavorites() {
       favoriteService.getFavorites()
         .then((response) => {
           this.favorites = response.data.favorites;
-          // After fetching favorites, update books with correct favorite status
-          this.updateBooksWithFavorites();
         })
         .catch((error) => {
           console.error('Error fetching favorites:', error);
         });
     },
-
-    /**
-     * Update the list of books to display on the current page
-     */
-    updatePagedBooks() {
-      const startIndex = (this.currentPage - 1) * this.perPage;
-      const endIndex = startIndex + this.perPage;
-      this.books = this.allBooks.slice(startIndex, endIndex);
+    updateElements(books) {
+      this.books = books;
+      this.fetchFavorites();
     },
-
-    /**
-     * Update books with correct favorite status
-     */
-    updateBooksWithFavorites() {
-      this.books.forEach(book => {
-        book.isFavorite = this.favorites.some(fav => fav.book_id === book.book_id);
-      });
-    },
-
-    /**
-     * Check if a page number is within the range of visible page numbers
-     */
-    isWithinRange(page) {
-      const rangeStart = Math.max(1, this.currentPage - 2);
-      const rangeEnd = Math.min(this.totalPages, this.currentPage + 2);
-      return page >= rangeStart && page <= rangeEnd;
-    },
-
-    /**
-     * Go to the first page
-     */
-    goToFirstPage() {
-      this.currentPage = 1;
-      this.updatePagedBooks();
-    },
-
-    /**
-     * Go to the last page
-     */
-    goToLastPage() {
-      this.currentPage = this.totalPages;
-      this.updatePagedBooks();
-    },
-
-    /**
-     * Go to the next page
-     */
-    goToNextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-        this.updatePagedBooks();
-      }
-    },
-
-    /**
-     * Go to the previous page
-     */
-    goToPreviousPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-        this.updatePagedBooks();
-      }
-    },
-
-    /**
-     * Go to a specific page
-     */
-    goToPage(page) {
-      this.currentPage = page;
-      this.updatePagedBooks();
-    },
-
-    /**
-     * Update favorites after a change
-     */
     updateFavorites() {
-      this.fetchFavorites(); // Update favorites after adding or removing a favorite
+      this.fetchFavorites();
     }
   }
 };
