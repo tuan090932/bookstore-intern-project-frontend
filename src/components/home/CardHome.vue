@@ -10,28 +10,34 @@
           :key="book.id"
           class="rounded-lg overflow-hidden shadow-lg ring-1 ring-stone-400 ring-opacity-40"
         >
-          <router-link :to="{ name: 'bookDetail', params: { id: book.book_id } }">
-            <div class="relative">
-              <img class="w-full" :src="book.image" alt="Product Image" />
-              <div
-                class="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 m-2 rounded-md text-sm font-medium"
-              >
-                SALE
-              </div>
+          <div class="relative">
+            <img class="w-full" :src="book.image" alt="Product Image" />
+            <div
+              class="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 m-2 rounded-md text-sm font-medium"
+            >
+              SALE
             </div>
-            <div class="p-4">
-              <h3 class="text-lg font-medium mb-2">{{ book.title }}</h3>
-              <p class="text-gray-600 text-sm mb-4">{{ book.description }}</p>
-              <div class="flex books-center justify-between">
-                <span class="font-bold text-lg">{{ book.price }}</span>
-                <button
-                  class="bg-blue-500 hover:bg-blue-200 text-white font-bold py-2 px-4 rounded"
-                >
-                  Buy Now
-                </button>
-              </div>
+          </div>
+          <div class="p-4 flex flex-col justify-between">
+            <div>
+              <router-link :to="{ name: 'bookDetail', params: { id: book.book_id } }"> 
+                <h3 class="text-lg font-medium mb-2 line-clamp-1">{{ book.title }}</h3>
+                <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ book.description }}</p>
+              </router-link>
             </div>
-          </router-link>
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-bold text-lg">{{ book.price }}</span>
+              <IconAddFavorite :bookId="book.book_id" :favorites="favorites" @updateFavorites="updateFavorites" />
+            </div>
+            <div class="flex justify-between space-x-2 text-sm">
+              <button class="bg-blue-500 hover:bg-blue-200 text-white py-1 rounded w-full">
+                Buy Now
+              </button>
+              <button class="bg-blue-500 hover:bg-blue-200 text-white py-1 rounded w-full">
+                Add to Cart
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -84,20 +90,27 @@
 
 <script>
 import bookService from '@/services/book.service';
+import favoriteService from '@/services/favorite.service';
+import IconAddFavorite from '@/components/favorite/IconAddFavorite.vue';
 
 export default {
   data() {
     return {
       allBooks: [], 
       books: [], 
+      favorites: [], 
       errorMessage: '',
       perPage: 10, 
       currentPage: 1, 
       totalPages: 0 
     };
   },
+  components: {
+    IconAddFavorite
+  },
   mounted() {
     this.getBooks();
+    this.fetchFavorites(); // Change to fetchFavorites to update favorites on mount
   },
   methods: {
     /**
@@ -116,12 +129,36 @@ export default {
     },
 
     /**
+     * Fetch favorites for the authenticated user
+     */
+    fetchFavorites() {
+      favoriteService.getFavorites()
+        .then((response) => {
+          this.favorites = response.data.favorites;
+          // After fetching favorites, update books with correct favorite status
+          this.updateBooksWithFavorites();
+        })
+        .catch((error) => {
+          console.error('Error fetching favorites:', error);
+        });
+    },
+
+    /**
      * Update the list of books to display on the current page
      */
     updatePagedBooks() {
       const startIndex = (this.currentPage - 1) * this.perPage;
       const endIndex = startIndex + this.perPage;
       this.books = this.allBooks.slice(startIndex, endIndex);
+    },
+
+    /**
+     * Update books with correct favorite status
+     */
+    updateBooksWithFavorites() {
+      this.books.forEach(book => {
+        book.isFavorite = this.favorites.some(fav => fav.book_id === book.book_id);
+      });
     },
 
     /**
@@ -175,11 +212,17 @@ export default {
     goToPage(page) {
       this.currentPage = page;
       this.updatePagedBooks();
+    },
+
+    /**
+     * Update favorites after a change
+     */
+    updateFavorites() {
+      this.fetchFavorites(); // Update favorites after adding or removing a favorite
     }
   }
 };
 </script>
 
 <style scoped>
-/* Add any specific CSS styles if needed */
 </style>

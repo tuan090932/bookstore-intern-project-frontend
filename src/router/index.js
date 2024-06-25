@@ -38,14 +38,20 @@ const router = createRouter({
       path: '/book/:id',
       name: 'bookDetail',
       component: () => import('@/views/BookDetail.vue')
-    }
+    },
+    { 
+      path: '/favorites',
+      name: 'favorites',
+      component: () => import('@/views/FavoritesView.vue')
+    },
   ]
 })
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/register', '/about', '/', '/book/:id']
+  const publicPages = ['/login', '/register', '/about', '/', '', '/book/:id']
   const authRequired = !publicPages.includes(to.path)
   const userStore = useUserStore()
   if (authRequired && !userStore.token) {
+    alert('You are not authorized to access this or session has ended. Please log in again.')
     return next({ path: '/login', query: { returnUrl: to.fullPath } })
   }
   next()

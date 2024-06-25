@@ -79,6 +79,9 @@
       <router-link to="/search" class="mr-4">
         <font-awesome-icon :icon="['fas', 'search']" />
       </router-link>
+      <router-link to="/favorites"> 
+        <font-awesome-icon :icon="['fas', 'heart']" class="mr-4" />
+      </router-link>
       <!-- User Button -->
       <router-link v-if="!isLoggedIn" to="/login" class="mr-4">
         <font-awesome-icon :icon="['fas', 'user']" />
