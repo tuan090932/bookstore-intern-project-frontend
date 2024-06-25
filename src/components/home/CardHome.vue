@@ -44,12 +44,12 @@
       <!-- Pagination Controls -->
       <Pagination
         :allElements="allBooks"
-        :perPage="perPage"
+        :perPage="10"
         @updateElements="updateElements"
       />
     </div>
   </div>
-</template>
+</template> 
 
 <script>
 import bookService from '@/services/book.service';
@@ -64,7 +64,6 @@ export default {
       books: [],
       favorites: [],
       errorMessage: '',
-      perPage: 10
     };
   },
   components: {
@@ -89,7 +88,6 @@ export default {
       favoriteService.getFavorites()
         .then((response) => {
           this.favorites = response.data.favorites;
-          this.updateBooksWithFavorites();
         })
         .catch((error) => {
           console.error('Error fetching favorites:', error);
@@ -97,12 +95,7 @@ export default {
     },
     updateElements(books) {
       this.books = books;
-      this.updateBooksWithFavorites();
-    },
-    updateBooksWithFavorites() {
-      this.books.forEach(book => {
-        book.isFavorite = this.favorites.some(fav => fav.book_id === book.book_id);
-      });
+      this.fetchFavorites();
     },
     updateFavorites() {
       this.fetchFavorites();
