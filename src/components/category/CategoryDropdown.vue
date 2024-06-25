@@ -36,7 +36,7 @@ export default {
   methods: {
     async loadCategories() {
       try {
-        const response = await CategoryService.getCategories()
+        const response = await CategoryService.getAllCategories()
         this.categories = response
       } catch (error) {
         console.error('Error fetching categories:', error)
