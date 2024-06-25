@@ -2,9 +2,6 @@
   <div class="min-h-screen flex items-center justify-center w-full bg-gray-100">
     <div class="bg-white shadow-md rounded-lg px-8 py-6 max-w-md">
       <h1 class="text-2xl font-bold text-center mb-4 text-gray-900">Welcome Back!</h1>
-      <div v-if="errorMessage" class="mb-4 text-red-500">
-        {{ errorMessage }}
-      </div>
       <form @submit.prevent="handleSubmit">
         <!-- Email or Username -->
         <div class="mb-4">
@@ -19,33 +16,39 @@
             placeholder="your@email.com or username"
             required
           />
+          <div v-if="errors.emailOrUsername" class="mt-1 text-red-500 text-sm">
+            {{ errors.emailOrUsername }}
+          </div>
         </div>
 
         <!-- Password -->
         <div class="mb-4 relative">
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-2"
-            >Password</label
-          >
-          <input
-            v-model="password"
-            :type="showPassword ? 'text' : 'password'"
-            id="password"
-            class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Enter your password"
-            required
-          />
-          <button
-            type="button"
-            @click="togglePasswordVisibility"
-            class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-          >
-            <font-awesome-icon :icon="showPassword ? 'eye-slash' : 'eye'" />
-          </button>
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+          <div class="relative w-80">
+            <input
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              id="password"
+              class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Enter your password"
+              required
+            />
+            <button
+              type="button"
+              @click="togglePasswordVisibility"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+            >
+              <font-awesome-icon :icon="showPassword ? 'eye-slash' : 'eye'" />
+            </button>
+          </div>
+          <div v-if="errors.password" class="mt-1 text-red-500 text-sm w-80">
+            {{ errors.password }}
+          </div>
           <a
             href="#"
             class="text-xs text-gray-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >Forgot Password?</a
-          >
+            >Forgot Password?
+          </a>
         </div>
 
         <!-- Remember me -->
@@ -88,7 +91,10 @@ export default {
       emailOrUsername: '',
       password: '',
       showPassword: false,
-      errorMessage: ''
+      errors: {
+        emailOrUsername: '',
+        password: ''
+      }
     }
   },
   computed: {
@@ -100,21 +106,46 @@ export default {
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword
     },
+    validatePassword(password) {
+      const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}:'"\\|,.<>/?])(?=.*[a-z]).{6,}$/;
+      return regex.test(password);
+    },
     async handleSubmit() {
-      if (this.emailOrUsername && this.password) {
-        try {
-          const response = await AuthService.login(this.emailOrUsername, this.password)
-          const token = response.access_token
-          this.userStore.setToken(token)
-          console.log('Login success!')
-          await this.getUserProfile(token)
-          this.$router.push('/profile')
-        } catch (error) {
-          this.errorMessage = 'Email or username and password is incorrect'
-        }
-      } else {
-        this.errorMessage = 'Please enter email or username and password'
+      this.clearErrors()
+      
+      if (!this.emailOrUsername) {
+        this.errors.emailOrUsername = 'Please enter email or username'
       }
+      
+      if (!this.password) {
+        this.errors.password = 'Please enter password'
+      } else if (!this.validatePassword(this.password)) {
+        this.errors.password = 'Password must include 1 uppercase, 1 number, 1 special character, and be 6+ characters long'
+      }
+
+      if (this.hasErrors()) {
+        return
+      }
+
+      try {
+        const response = await AuthService.login(this.emailOrUsername, this.password)
+        const token = response.access_token
+        this.userStore.setToken(token)
+        console.log('Login success!')
+        await this.getUserProfile(token)
+        this.$router.push('/profile')
+      } catch (error) {
+        this.errors.emailOrUsername = 'Email or username and password is incorrect'
+      }
+    },
+    clearErrors() {
+      this.errors = {
+        emailOrUsername: '',
+        password: ''
+      }
+    },
+    hasErrors() {
+      return Object.values(this.errors).some(error => error !== '')
     },
     async getUserProfile(token) {
       try {
