@@ -48,7 +48,7 @@
               class="mt-10 w-2/6 bg-blue-500 text-white p-2 rounded-full font-bold hover:bg-blue-600 flex items-center justify-center text-lg"
             >
               <font-awesome-icon :icon="['fas', 'cart-shopping']" />
-              Cho vào giỏ sách
+              Add to cart
             </button>
           </div>
         </div>

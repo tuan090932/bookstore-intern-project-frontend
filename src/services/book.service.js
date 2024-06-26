@@ -35,8 +35,7 @@ class BookService {
       throw error;
     }
   }
-
-
+  
   async getBookByCategory(categoryId) {
     try {
       const params = new URLSearchParams({
@@ -49,13 +48,6 @@ class BookService {
       throw error;
     }
   }
-
-
-
-
-
-
-
 }
 
 export default new BookService()

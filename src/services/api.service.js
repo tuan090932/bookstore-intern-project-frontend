@@ -3,7 +3,11 @@ import { useUserStore } from '@/stores/user'
 import router from '@/router/index'
 
 const api = axios.create({
-  baseURL: 'http://localhost/api/'
+  baseURL: 'http://localhost/api/',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest'
+  }
 })
 
 api.interceptors.request.use(
@@ -46,6 +50,7 @@ api.interceptors.response.use(
         // Handle other errors or statuses as needed
         break
     }
+
     return Promise.reject(error)
   }
 )
