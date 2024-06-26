@@ -7,7 +7,6 @@
       <div v-if="visibleCategories.length === 0" class="text-center text-blue-500 mb-4">
         No categories available at the moment. Please check back later.
       </div>
-
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div v-for="category in visibleCategories" :key="category.id" class="bg-white p-4 rounded shadow">
           <h2 class="text-xl font-bold mb-2 text-center">{{ category.category_name }}</h2>
