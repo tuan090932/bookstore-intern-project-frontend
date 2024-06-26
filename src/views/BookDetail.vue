@@ -1,18 +1,17 @@
 <template>
   <div>
-    <div v-if="true">
-      <InformationBookDetail :book="book" />
-      <div class="container mx-auto">
-        <RelatedBooks :books="booksByAuthor"/>
-      </div>
-
-      <div class="container mx-auto ">
-        <RelatedBooks :books="booksByCategory"/>
-      </div>
+    <InformationBookDetail :book="book" :errorMessage="errorMessage" />
+    <div class="mx-auto container">
+      <RelatedBooks
+        :books="booksByAuthor"
+        :title="'Journey Through the Works of ' + book.authors.author_name"
+      />
     </div>
-    <div v-else>
-      <!-- Loading spinner or message -->
-      <p>Loading...</p>
+    <div class="mx-auto container">
+      <RelatedBooks
+        :books="booksByCategory"
+        :title="'Books in the ' + book.categories.category_name + ' Category'"
+      />
     </div>
   </div>
 </template>
@@ -40,17 +39,29 @@ export default {
         author_id: 0,
         category_id: 0,
         publisher_id: 0,
+        authors: {
+          author_name: ''
+        },
+        categories: {
+          category_name: ''
+        },
+        publishers: {
+          publisher_name: ''
+        }
       },
       errorMessage: '',
       booksByAuthor: [],
       booksByCategory: [],
-      loading: true, // Add loading state
     };
   },
   async created() {
-    await this.loadBookDetails();
-    await this.loadBookByAuthor();
-    await this.loadBookByCategory();
+    try {
+      await this.loadBookDetails();
+      await this.loadBookByAuthor();
+      await this.loadBookByCategory();
+    } catch (error) {
+      this.errorMessage = 'Failed to load book details';
+    }
   },
   methods: {
     async loadBookDetails() {
@@ -60,24 +71,27 @@ export default {
         console.log('Book details:', this.book);
       } catch (error) {
         this.errorMessage = 'Failed to load book details';
+        throw error;
       }
     },
-    async loadBookByAuthor(){
-      try{
+    async loadBookByAuthor() {
+      try {
         const response = await BookService.getBookByAuthor(this.book.author_id);
         this.booksByAuthor = response;
-        console.log('Book details:author', this.booksByAuthor);
+        console.log('Books by author:', this.booksByAuthor);
       } catch (error) {
-        this.errorMessage = 'Failed to load book details';
+        this.errorMessage = 'Failed to load books by author';
+        throw error;
       }
     },
-    async loadBookByCategory(){
-      try{
+    async loadBookByCategory() {
+      try {
         const response = await BookService.getBookByCategory(this.book.category_id);
         this.booksByCategory = response;
-        console.log('Book details:category', this.booksByCategory,this.book.category_id);
+        console.log('Books by category:', this.booksByCategory);
       } catch (error) {
-        this.errorMessage = 'Failed to load book details';
+        this.errorMessage = 'Failed to load books by category';
+        throw error;
       }
     }
   }
@@ -85,5 +99,4 @@ export default {
 </script>
 
 <style scoped>
-/* Add any specific CSS styles if needed */
 </style>

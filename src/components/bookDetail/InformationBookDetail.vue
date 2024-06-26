@@ -62,7 +62,6 @@ export default {
   props: {
     book: {
       type: Object,
-      required: true
     },
     errorMessage: {
       type: String,
