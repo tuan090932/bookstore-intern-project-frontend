@@ -26,11 +26,11 @@
             ></path>
           </svg>
         </div>
-        <div class="w-[calc(100%-58px)] lg:w-[calc(50%-58px)]">Sản phẩm</div>
-        <div class="text-center w-[12.5%]">Đơn giá</div>
-        <div class="text-center w-[12.5%]">Số lượng</div>
-        <div class="text-center w-[12.5%]">Thành tiền</div>
-        <div class="text-center w-[12.5%]">Thao tác</div>
+        <div class="w-[calc(100%-58px)] lg:w-[calc(50%-58px)]">Product</div>
+        <div class="text-center w-[12.5%]">Unit Price</div>
+        <div class="text-center w-[12.5%]">Quantity</div>
+        <div class="text-center w-[12.5%]">Total</div>
+        <div class="text-center w-[12.5%]">Actions</div>
       </div>
 
       <!-- Cart Item -->
@@ -52,7 +52,7 @@
                     item.title
                   }}</span>
                   <span class="lg:text-[14px]"
-                    >Phân loại:
+                    >Category:
                     <span class="lg:text-[16px]">{{ item.category }}</span>
                   </span>
                   <div class="color-orange md:hidden font-semibold">
@@ -90,7 +90,7 @@
             <button
               class="p-4 text-center text-red-500 lg:w-[12.5%] hover:font-bold hover:underline"
             >
-              Xóa
+              Delete
             </button>
           </div>
         </div>
@@ -102,12 +102,12 @@
       >
         <div class="flex text-[30px] gap-x-2 items-center">
           <input class="aspect-square w-[20px] lg:w-[25px] rounded-[5px]" type="checkbox" />
-          <div class="hidden md:block text-[16px]">Chọn tất cả</div>
-          <div class="lg:hidden block text-[16px]">Tất cả</div>
+          <div class="hidden md:block text-[16px]">Select all</div>
+          <div class="lg:hidden block text-[16px]">All</div>
         </div>
         <div class="result-cart flex items-center">
           <div class="flex text-[30px] gap-x-2 items-center">
-            <div class="text-[14px] lg:text-[16px]">Tổng thanh toán:</div>
+            <div class="text-[14px] lg:text-[16px]">Total payment:</div>
             <span class="text-[18px] lg:text-[24px] text-blue-500 font-semibold">
               <span class="sum-cart">{{ $filters.formatNumber(totalSum) }}</span
               >đ
@@ -116,7 +116,7 @@
           <button
             class="ml-2 lg:ml-5 rounded-[2px] text-white border bg-blue-500 hover:bg-blue-600 h-[56px] px-[10px] lg:px-[20px] text-white text-[15px] lg:text-[24px] font-semibold"
           >
-            Mua hàng
+            Buy now
           </button>
         </div>
       </div>

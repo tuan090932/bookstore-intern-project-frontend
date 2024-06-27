@@ -7,7 +7,7 @@ import setupVeeValidate from '@/plugins/veeValidate';
 import i18n from '@/plugins/i18n';
 import App from '@/App.vue';
 import router from '@/router';
-import filters from './helpers/filters'
+import filters from '@/helpers/filters'
 
 const app = createApp(App);
 
