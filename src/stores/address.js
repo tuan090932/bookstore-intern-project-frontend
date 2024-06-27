@@ -7,6 +7,8 @@ export const useAddressStore = defineStore('address', {
     fetched: false,
   }),
   actions: {
+
+    // Add the fetchAddresses action
     async fetchAddresses() {
       if (!this.fetched) {
         try {
@@ -18,6 +20,8 @@ export const useAddressStore = defineStore('address', {
         }
       }
     },
+
+    // Add the addAddress action
     async addAddress(address) {
       try {
         const response = await AddressService.addAddress(address);
@@ -26,6 +30,8 @@ export const useAddressStore = defineStore('address', {
         console.error('Error adding address:', error);
       }
     },
+
+    // Add the deleteAddress action
     async deleteAddress(id) {
       try {
         await AddressService.deleteAddress(id);
@@ -34,15 +40,19 @@ export const useAddressStore = defineStore('address', {
         console.error('Error deleting address:', error);
       }
     },
+
+    // Add the updateAddress action
     async updateAddress(id, address) {
       try {
         const response = await AddressService.updateAddress(id, address);
-        const index = this.addresses.findIndex((addr) => addr.address_id === id);
+        const index = this.addresses.findIndex((addr) => addr.address_id === id);// Find the index of the address to update
         this.addresses[index] = response.data;
       } catch (error) {
         console.error('Error updating address:', error);
       }
     },
+
+    // Add the getAddress action
     getAddresses() {
       return this.addresses;
     },

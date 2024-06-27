@@ -2,6 +2,8 @@
   <div class="m-2 border-b-4 border-indigo-500 pb-3">
     <h2 class="text-center text-lg font-bold my-2">Edit Address Form</h2>
     <ValidationForm @submit="submitForm" >
+
+      <!-- Shipping Address -->
       <div class="mb-4">
         <label for="shipping_address" class="block text-gray-700 text-sm font-bold mb-2">Shipping Address:</label>
         <Field name="shipping_address" id="shipping_address" v-model="form.shipping_address" rules="required"
@@ -9,6 +11,7 @@
         <ErrorMessage name="shipping_address" class="text-red-500 text-xs italic" />
       </div>
 
+      <!-- City -->
       <div class="mb-4">
         <label for="city" class="block text-gray-700 text-sm font-bold mb-2">City:</label>
         <Field name="city" id="city" v-model="form.city" rules="required"
@@ -16,6 +19,7 @@
         <ErrorMessage name="city" class="text-red-500 text-xs italic" />
       </div>
 
+      <!-- Country -->
       <div class="mb-4">
         <label for="country_name" class="block text-gray-700 text-sm font-bold mb-2">Country:</label>
         <Field name="country_name" id="country_name" v-model="form.country_name" rules="required"
@@ -23,6 +27,7 @@
         <ErrorMessage name="country_name" class="text-red-500 text-xs italic" />
       </div>
 
+      <!-- Submit and Cancel Buttons -->
       <div class="flex justify-between">
         <button type="submit"
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
@@ -50,6 +55,7 @@ export default {
   data() {
     return {
       form: {
+        // Initialize the form with the address data
         shipping_address: this.address.shipping_address || '',
         city: this.address.city || '',
         country_name: this.address.country_name || ''
@@ -57,12 +63,14 @@ export default {
     };
   },
   methods: {
+    // Method to submit the form
     async submitForm() {
       const addressStore = useAddressStore();
       try {
+        // Update the address
         await addressStore.updateAddress(this.address.address_id, this.form);
         console.log('Address updated successfully');
-        this.$emit('address-updated', this.form);
+        this.$emit('address-updated', this.form); // Emit the event to the parent component
         this.$emit('close');
       } catch (error) {
         console.error('Error updating address:', error);

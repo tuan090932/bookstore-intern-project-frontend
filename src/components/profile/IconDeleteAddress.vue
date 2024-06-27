@@ -19,6 +19,8 @@
       },
     },
     methods: {
+
+      // Method to delete an address
       async deleteAddress() {
         const addressStore = useAddressStore();
         try {
