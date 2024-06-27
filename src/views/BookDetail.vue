@@ -39,15 +39,6 @@ export default {
         author_id: 0,
         category_id: 0,
         publisher_id: 0,
-        authors: {
-          author_name: ''
-        },
-        categories: {
-          category_name: ''
-        },
-        publishers: {
-          publisher_name: ''
-        }
       },
       errorMessage: '',
       booksByAuthor: [],
