@@ -2,36 +2,36 @@
   <div class="min-h-screen flex items-center justify-center w-full bg-gray-100">
     <div class="bg-white shadow-md rounded-lg px-8 py-6 max-w-md">
       <h1 class="text-2xl font-bold text-center mb-4 text-gray-900">Welcome Back!</h1>
-      <Form @submit="handleSubmit" v-slot="{ errors }">
+      <ValidationForm @submit="handleSubmit">
         <!-- Email or Username -->
         <div class="mb-4 w-80">
           <label for="emailOrUsername" class="block text-sm font-medium text-gray-700 mb-2"
             >Email Address or Username</label
           >
           <Field
+            v-model="emailOrUsername"
             name="emailOrUsername"
             type="text"
             id="emailOrUsername"
+            rules="required"
             class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="your@email.com or username"
-            rules="required"
-            v-model="emailOrUsername"
           />
           <ErrorMessage name="emailOrUsername" class="mt-1 text-red-500 text-sm" />
         </div>
 
         <!-- Password -->
-        <div class="mb-4 relative w-80">
+        <div class="mb-4 w-80 relative">
           <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
           <div class="relative w-80">
             <Field
+              v-model="password"
               name="password"
               :type="showPassword ? 'text' : 'password'"
               id="password"
-              class="shadow-sm rounded-md w-80 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 "
+              :rules="{ required: true, password: validatePassword }"
+              class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Enter your password"
-              :rules="{ required: true, password: true }"
-              v-model="password"
             />
             <button
               type="button"
@@ -41,7 +41,7 @@
               <font-awesome-icon :icon="showPassword ? 'eye-slash' : 'eye'" />
             </button>
           </div>
-          <ErrorMessage name="password" class="mt-1 text-red-500 text-sm" />
+          <ErrorMessage name="password" class="mt-1 text-red-500 text-sm w-80" />
         </div>
         <a
           href="#"
@@ -50,13 +50,14 @@
         </a>
 
         <!-- Remember me -->
-        <div class="flex items-center justify-between mb-4 mt-3">
+        <div class="flex items-center justify-between mb-4 mt-2">
           <div class="flex items-center">
             <Field
               type="checkbox"
               name="remember"
               id="remember"
               class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:outline-none"
+              :value="true"
             />
             <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
           </div>
@@ -71,74 +72,69 @@
         <button
           type="submit"
           class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          :disabled="Object.keys(errors).length > 0"
         >
           Login
         </button>
-      </Form>
+      </ValidationForm>
     </div>
   </div>
 </template>
 
 <script>
-import { Form, Field, ErrorMessage } from 'vee-validate';
-import { defineRule } from 'vee-validate';
-import AuthService from '@/services/auth.service';
-import { useUserStore } from '@/stores/user';
+import AuthService from '@/services/auth.service'
+import { useUserStore } from '@/stores/user'
+import { defineRule } from 'vee-validate'
 
 export default {
-  components: {
-    Form,
-    Field,
-    ErrorMessage,
-  },
   data() {
     return {
       emailOrUsername: '',
       password: '',
       showPassword: false,
-    };
+    }
   },
   computed: {
     userStore() {
-      return useUserStore();
-    },
+      return useUserStore()
+    }
   },
-  mounted() {
-    defineRule('password', (value) => {
+  methods: {
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword
+    },
+    validatePassword(value) {
       const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}:'"\\|,.<>/?])(?=.*[a-z]).{6,}$/;
       if (!regex.test(value)) {
         return 'Password must include 1 uppercase, 1 number, 1 special character, and be 6+ characters long';
       }
       return true;
-    });
-  },
-  methods: {
-    togglePasswordVisibility() {
-      this.showPassword = !this.showPassword;
     },
     async handleSubmit(values) {
       try {
-        const response = await AuthService.login(values.emailOrUsername, values.password);
-        const token = response.access_token;
-        this.userStore.setToken(token);
-        console.log('Login success!');
-        await this.getUserProfile(token);
-        this.$router.push('/profile');
+        const response = await AuthService.login(values.emailOrUsername, values.password)
+        const token = response.access_token
+        this.userStore.setToken(token)
+        console.log('Login success!')
+        await this.getUserProfile(token)
+        this.$router.push('/profile')
       } catch (error) {
-        console.error('Login failed:', error);
+        // Handle login error
+        console.error('Login failed:', error)
       }
     },
     async getUserProfile(token) {
       try {
-        const user = await AuthService.getProfile(token);
-        this.userStore.setUser(user);
+        const user = await AuthService.getProfile(token)
+        this.userStore.setUser(user)
       } catch (error) {
-        console.error('Failed to fetch user profile:', error);
+        console.error('Failed to fetch user profile:', error)
       }
-    },
+    }
   },
-};
+  created() {
+    defineRule('password', this.validatePassword);
+  }
+}
 </script>
 
 <style>

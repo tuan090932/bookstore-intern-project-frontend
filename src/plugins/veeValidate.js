@@ -17,6 +17,7 @@ export default function setupVeeValidate(app) {
       messages: {
         ...en.messages,
         required: (required) => `This ${required.field} field is required`,
+        password: 'Password must include 1 uppercase, 1 number, 1 special character, and be 6+ characters long',
         email: 'Please enter a valid email address',
         min: ( min ) => `This field must have at least ${min.rule.params} characters`,
         max: ( max ) => `This field must have at most ${max.rule.params} characters`,
