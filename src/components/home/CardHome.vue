@@ -52,37 +52,39 @@
 </template> 
 
 <script>
-import bookService from '@/services/book.service';
 import favoriteService from '@/services/favorite.service';
 import IconAddFavorite from '@/components/favorite/IconAddFavorite.vue';
-import Pagination from '@/components/Pagination.vue'; // Import the Pagination component
+import Pagination from '@/components/Pagination.vue'; 
+import { useBookStore } from '@/stores/book';
 
 export default {
+  components: {
+    IconAddFavorite,
+    Pagination // Register the Pagination component
+  },
   data() {
     return {
-      allBooks: [],
       books: [],
       favorites: [],
       errorMessage: '',
     };
   },
-  components: {
-    IconAddFavorite,
-    Pagination // Register the Pagination component
+  computed: {
+    allBooks() {
+      const bookStore = useBookStore();
+      return bookStore.getBooks();
+    }
   },
-  mounted() {
-    this.getBooks();
-    this.fetchFavorites();
-  },
+
   methods: {
-    getBooks() {
-      bookService.getAllBooks()
-        .then((response) => {
-          this.allBooks = response;
-        })
-        .catch((error) => {
-          console.error('Error fetching books:', error);
-        });
+    async fetchBooks() {
+      const bookStore = useBookStore();
+      try {
+        await bookStore.fetchBooks();
+      } catch (error) {
+        console.error('Error fetching books:', error);
+        this.errorMessage = 'Error fetching books';
+      }
     },
     fetchFavorites() {
       favoriteService.getFavorites()
@@ -100,7 +102,11 @@ export default {
     updateFavorites() {
       this.fetchFavorites();
     }
-  }
+  },
+  mounted() {
+    this.fetchBooks();
+    this.fetchFavorites();
+  },
 };
 </script>
 

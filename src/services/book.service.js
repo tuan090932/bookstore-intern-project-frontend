@@ -4,23 +4,22 @@ const API_URL = 'books/'
 
 class BookService {
   async getBookDetails(bookId) {
-    try {
-      const response = await api.get(`${API_URL}${bookId}`)
-      return response.data
-    } catch (error) {
-      console.error('Error getting book details:', error)
-      throw error
-    }
+    const response = await api.get(`${API_URL}${bookId}`)
+    return response.data
   }
-  
+
   async getAllBooks() {
-    try {
-      const response = await api.get(API_URL)
-      return response.data
-    } catch (error) {
-      console.error('Error getting all books:', error)
-      throw error
-    }
+    const response = await api.get(API_URL)
+    return response.data
+  }
+
+  async searchBooks(searchTerm) {
+    const response = await api.get(`${API_URL}search`, {
+      params: {
+        query: searchTerm
+      }
+    })
+    return response.data
   }
 }
 
