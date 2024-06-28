@@ -38,7 +38,7 @@
             <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">{{ book.description }}</p>
           </div>
           <div class="flex items-center mt-4">
-            <span class="font-bold text-gray-700 dark:text-gray-300">Số lượng:</span>
+            <span class="font-bold text-gray-700 dark:text-gray-300">Quantity:</span>
             <button class="px-2 py-1 mx-2 border" @click="decreaseQuantity">-</button>
             <span>{{ quantity }}</span>
             <button class="px-2 py-1 mx-2 border" @click="increaseQuantity">+</button>
@@ -48,7 +48,7 @@
               class="mt-10 w-2/6 bg-blue-500 text-white p-2 rounded-full font-bold hover:bg-blue-600 flex items-center justify-center text-lg"
             >
               <font-awesome-icon :icon="['fas', 'cart-shopping']" />
-              Add to cart
+              ADD TO CART
             </button>
           </div>
         </div>
