@@ -118,7 +118,6 @@ import { watch } from 'vue'
 import CategoryDropdown from '@/components/category/CategoryDropdown.vue'
 import SearchBookForm from '@/components/search/SearchBookForm.vue'
 import QuickSearchList from '@/components/search/QuickSearchList.vue'
-import { useSearchStore } from '@/stores/search'
 
 export default {
   components: {
