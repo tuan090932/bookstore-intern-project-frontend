@@ -21,7 +21,6 @@
   </script>
   
   <style scoped>
-  /* Add any specific CSS styles if needed */
   .group:hover .group-hover\:block {
     display: block;
   }

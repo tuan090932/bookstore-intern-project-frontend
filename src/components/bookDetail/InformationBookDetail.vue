@@ -11,7 +11,7 @@
         <div class="px-4">
           <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">{{ book.title }}</h2>
           <div class="mb-4">
-              <p class="text-red-600 dark:text-red-400 text-4xl mb-5 font-bold">{{ formatPrice(book.price) }}</p>
+              <p class="text-red-600 dark:text-red-400 text-4xl mb-5 font-bold">{{ $filters.formatNumber(book.price)}}đ</p>
             <div class="mb-2 flex">
               <span class="font-bold text-gray-700 dark:text-gray-300">Stock:</span>
               <p class="text-gray-600 dark:text-gray-300">{{ book.stock }}</p>
@@ -74,12 +74,13 @@ export default {
     };
   },
   methods: {
-    formatPrice(price) {
-      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
-    },
+
+    // Increase and decrease quantity
     increaseQuantity() {
       this.quantity++;
     },
+
+    // Decrease quantity
     decreaseQuantity() {
       if (this.quantity > 1) {
         this.quantity--;

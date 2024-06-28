@@ -33,6 +33,7 @@
         {{ user.phone_number || 'Not yet declared ...' }}
       </p>
     </div>
+    <address-view/>
     <button
       @click="$emit('edit')"
       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -47,15 +48,16 @@
 </template>
 
 <script>
+import AddressView from '@/components/profile/AddressView.vue'
 export default {
   props: {
     user: {
       type: Object,
-
-
-  
       required: true
     }
+  },
+  components: {
+    AddressView
   }
 }
 </script>

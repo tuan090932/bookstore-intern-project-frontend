@@ -55,6 +55,8 @@ export default {
     }
   },
   methods: {
+    
+    // Load book details
     async loadBookDetails() {
       try {
         const response = await BookService.getBookDetails(this.$route.params.id);
@@ -65,6 +67,8 @@ export default {
         throw error;
       }
     },
+
+    // Load books by author
     async loadBookByAuthor() {
       try {
         const response = await BookService.getBookByAuthor(this.book.author_id);
@@ -75,6 +79,8 @@ export default {
         throw error;
       }
     },
+
+    // Load books by category
     async loadBookByCategory() {
       try {
         const response = await BookService.getBookByCategory(this.book.category_id);
