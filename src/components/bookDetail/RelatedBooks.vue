@@ -12,7 +12,7 @@
           <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2 truncate max-w-xs">{{ books.title }}</h3>
         </div>
         <div>
-          <span class="font-bold text-lg">{{$filters.formatNumber(books.price) }}</span>
+          <span class="font-bold text-lg">{{$filters.formatNumber(books.price) }}đ</span>
         </div>
         <p class="text-gray-600 text-center relative group">
           {{ books.authors.author_name }}
