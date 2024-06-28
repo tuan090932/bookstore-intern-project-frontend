@@ -11,6 +11,14 @@ export default function setupVeeValidate(app) {
     }
   });
 
+  VeeValidate.defineRule('strongPassword', (value) => {
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}:'"\\|,.<>/?])(?=.*[a-z]).{6,}$/;
+    if (!regex.test(value)) {
+      return 'Password must include 1 uppercase, 1 number, 1 special character, and be 6+ characters long';
+    }
+    return true;
+  });
+
   // Localize VeeValidate
   localize({
     en: {

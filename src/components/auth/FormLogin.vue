@@ -29,7 +29,7 @@
               name="password"
               :type="showPassword ? 'text' : 'password'"
               id="password"
-              :rules="{ required: true, password: validatePassword }"
+              :rules="{ required: true, strongPassword: true }"
               class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Enter your password"
             />
@@ -83,7 +83,6 @@
 <script>
 import AuthService from '@/services/auth.service'
 import { useUserStore } from '@/stores/user'
-import { defineRule } from 'vee-validate'
 
 export default {
   data() {
@@ -101,13 +100,6 @@ export default {
   methods: {
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword
-    },
-    validatePassword(value) {
-      const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}:'"\\|,.<>/?])(?=.*[a-z]).{6,}$/;
-      if (!regex.test(value)) {
-        return 'Password must include 1 uppercase, 1 number, 1 special character, and be 6+ characters long';
-      }
-      return true;
     },
     async handleSubmit(values) {
       try {
@@ -130,9 +122,6 @@ export default {
         console.error('Failed to fetch user profile:', error)
       }
     }
-  },
-  created() {
-    defineRule('password', this.validatePassword);
   }
 }
 </script>
