@@ -1,6 +1,6 @@
 <template>
   <header
-    class="header sticky top-0 bg-white shadow-md flex items-center justify-between px-8 py-2"
+    class="header sticky top-0 bg-white shadow-md flex items-center px-8 py-2 w-full"
     style="z-index: 1"
   >
     <div class="flex items-center w-6/12 md:w-3/12">
@@ -36,17 +36,7 @@
         <li
           class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer"
         >
-          <router-link to="/collections">Collections</router-link>
-        </li>
-        <li
-          class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer"
-        >
           <router-link to="/about">About Us</router-link>
-        </li>
-        <li
-          class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer"
-        >
-          <router-link to="/contact">Contact Us</router-link>
         </li>
       </ul>
     </nav>
@@ -61,21 +51,14 @@
           <router-link to="/products" @click="toggleMobileMenu">Products</router-link>
         </li>
         <li class="p-4 w-full text-center border-b">
-          <router-link to="/collections" @click="toggleMobileMenu">Collections</router-link>
-        </li>
-        <li class="p-4 w-full text-center border-b">
           <router-link to="/about" @click="toggleMobileMenu">About Us</router-link>
-        </li>
-        <li class="p-4 w-full text-center border-b">
-          <router-link to="/contact" @click="toggleMobileMenu">Contact Us</router-link>
         </li>
       </ul>
     </nav>
 
     <!-- buttons -->
-    <div class="w-6/12 md:w-3/12 flex relative justify-end items-center">
+    <div class="w-6/12 md:w-3/12 flex relative justify-end items-center ml-auto">
       <!-- Search Form -->
-
       <div v-if="showSearchForm">
         <SearchBookForm />
       </div>
