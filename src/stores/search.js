@@ -9,11 +9,13 @@ export const useSearchStore = defineStore({
     error: null
   }),
   actions: {
+
+    // This method will be used to search for books
     async getSearchBook(searchTerm) {
       try {
         this.loading = true
         console.log(searchTerm);
-        const results = await searchService.searchBooks(searchTerm)
+        const results = await searchService.searchBooks(searchTerm) // Call the searchBooks method from the searchService
         this.searchs = results
       } catch (error) {
         console.error('Error searching books:', error)

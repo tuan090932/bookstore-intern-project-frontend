@@ -90,7 +90,7 @@
         />
       </button>
       <Transition name="bounce">
-        <QuickSearchList class="absolute right-20 top-12 mr-10" v-if="showSearchForm" />
+        <QuickSearchList @toggleSearch="toggleSearchForm" class="absolute right-20 top-12 mr-10" v-if="showSearchForm" />
       </Transition>
       <!-- Favorites Button -->
       <router-link to="/favorites">

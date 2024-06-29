@@ -18,15 +18,17 @@ import { useSearchStore } from '@/stores/search'
 const searchQuery = ref('')
 const searchStore = useSearchStore()
 
+// Methods to handle input and form submission
 const handleInput = async () => {
   try {
-    await searchStore.getSearchBook(searchQuery.value)
+    await searchStore.getSearchBook(searchQuery.value) // Call the getSearchBook method in the search store
     console.log('Search results:', searchStore.getSearchs())
   } catch (error) {
     console.error('Error searching books:', error)
   }
 }
 
+// Method to handle form submission
 const handleSubmit = async () => {
   try {
     await searchStore.getSearchBook(searchQuery.value)
