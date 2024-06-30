@@ -3,8 +3,9 @@ import api from './api.service'
 const API_URL = 'auth/'
 
 class AuthService {
-  async register(name, email, password, confirmPassword) {
+  async register(userName, name, email, password, confirmPassword) {
     const response = await api.post(API_URL + 'register', {
+      user_name: userName,
       name,
       email,
       password,
@@ -13,9 +14,9 @@ class AuthService {
     return response.data
   }
 
-  async login(email, password) {
+  async login(loginField, password) {
     const response = await api.post(API_URL + 'login', {
-      email,
+      [loginField.includes('@') ? 'email' : 'user_name']: loginField,
       password
     })
     return response.data
