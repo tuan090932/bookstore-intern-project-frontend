@@ -22,7 +22,6 @@ const searchStore = useSearchStore()
 const handleInput = async () => {
   try {
     await searchStore.getSearchBook(searchQuery.value) // Call the getSearchBook method in the search store
-    console.log('Search results:', searchStore.getSearchs())
   } catch (error) {
     console.error('Error searching books:', error)
   }
@@ -32,7 +31,6 @@ const handleInput = async () => {
 const handleSubmit = async () => {
   try {
     await searchStore.getSearchBook(searchQuery.value)
-    console.log('Search results:', searchStore.getSearchs())
   } catch (error) {
     console.error('Error searching books:', error)
   }

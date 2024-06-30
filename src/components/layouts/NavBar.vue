@@ -67,7 +67,6 @@
       </button>
       <button v-if="showSearchForm" @click="toggleSearchForm">
         <font-awesome-icon
-          @click="removeSearchs"
           class="mr-4 ml-2"
           :icon="['fas', 'circle-xmark']"
         />
