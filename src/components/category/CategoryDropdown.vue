@@ -7,12 +7,12 @@
     Categories
     <ul
       v-if="showCategories"
-      class="absolute left-0 top-full w-48 bg-white border border-gray-300 shadow-lg"
+      class="absolute left-0 top-full custom-width bg-white border border-gray-300 shadow-lg flex flex-wrap p-4"
     >
       <li
         v-for="category in categories"
         :key="category.category_id"
-        class="p-2 hover:bg-green-500 hover:text-white"
+        class="p-2 hover:bg-green-500 hover:text-white w-1/3"
       >
         {{ category.category_name }}
       </li>
@@ -47,5 +47,7 @@ export default {
 </script>
 
 <style scoped>
-/* Add styles if needed */
+.custom-width {
+  width: 30rem; 
+}
 </style>
