@@ -10,6 +10,8 @@ export const useBookStore = defineStore({
     error: null
   }),
   actions: {
+
+    // This method will be used to fetch all books
     async fetchBooks() {
       try {
         this.loading = true
@@ -22,6 +24,8 @@ export const useBookStore = defineStore({
         this.loading = false
       }
     },
+
+    // This method will be used to fetch book details
     async fetchBookDetails(bookId) {
       try {
         this.loading = true
@@ -30,17 +34,6 @@ export const useBookStore = defineStore({
       } catch (error) {
         console.error('Error fetching book details:', error)
         throw error
-      } finally {
-        this.loading = false
-      }
-    },
-    async searchBooks(searchTerm) {
-      try {
-        this.loading = true
-        await BookService.searchBooks(searchTerm)
-      } catch (error) {
-        console.error('Error searching books:', error)
-        this.error = error.message || 'Failed to search books'
       } finally {
         this.loading = false
       }

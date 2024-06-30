@@ -14,7 +14,6 @@ export const useSearchStore = defineStore({
     async getSearchBook(searchTerm) {
       try {
         this.loading = true
-        console.log(searchTerm);
         const results = await searchService.searchBooks(searchTerm) // Call the searchBooks method from the searchService
         this.searchs = results
       } catch (error) {

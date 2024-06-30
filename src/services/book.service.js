@@ -13,14 +13,6 @@ class BookService {
     return response.data
   }
 
-  async searchBooks(searchTerm) {
-    const response = await api.get(`${API_URL}search`, {
-      params: {
-        query: searchTerm
-      }
-    })
-    return response.data
-  }
 }
 
 export default new BookService()
