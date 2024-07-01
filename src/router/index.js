@@ -49,10 +49,15 @@ const router = createRouter({
       name: 'favorites',
       component: () => import('@/views/FavoritesView.vue')
     },
+    {
+      path: '/search',
+      name: 'search',
+      component: () => import('@/views/SearchView.vue')
+    }
   ]
 })
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/register', '/about', '/', '', '/book/:id']
+  const publicPages = ['/login', '/register', '/about', '/', '', '/book/:id', '/search', '/book/:id']
   const authRequired = !publicPages.includes(to.path)
   const userStore = useUserStore()
   if (authRequired && !userStore.token) {

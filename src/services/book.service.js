@@ -6,24 +6,23 @@ class BookService {
 
   //Fetch the details of a specific book by its ID
   async getBookDetails(bookId) {
-    try {
-      const response = await api.get(`${API_URL}${bookId}`)
-      return response.data
-    } catch (error) {
-      console.error('Error getting book details:', error)
-      throw error
-    }
+    const response = await api.get(`${API_URL}${bookId}`)
+    return response.data
   }
-  
   // Fetch details of all books
   async getAllBooks() {
-    try {
-      const response = await api.get(API_URL)
-      return response.data
-    } catch (error) {
-      console.error('Error getting all books:', error)
-      throw error
-    }
+    const response = await api.get(API_URL)
+    return response.data
+  }
+
+  // Search for books by a search term
+  async searchBooks(searchTerm) {
+    const response = await api.get(`${API_URL}search`, {
+      params: {
+        query: searchTerm
+      }
+    })
+    return response.data
   }
 
   // Fetch books by a specific author's ID

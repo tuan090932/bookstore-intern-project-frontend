@@ -57,7 +57,7 @@ export default {
     },
   },
   methods: {
-
+    
     // Method to fetch addresses
     async fetchAddresses() {
       const addressStore = useAddressStore();
