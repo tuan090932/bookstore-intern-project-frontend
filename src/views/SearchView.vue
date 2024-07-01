@@ -70,7 +70,7 @@
 
 <script>
 import Pagination from '@/components/PaginationWithApi.vue'; // Adjust the path as per your project structure
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { useSearchStore } from '@/stores/search'; // Assuming this is your Vuex/Pinia store
 
 export default {
@@ -104,10 +104,6 @@ export default {
       }
     };
 
-    // Watch currentPage for changes
-    // watch(currentPage, () => {
-    //   searchBooks();
-    // });
 
     return {
       searchTerm,
