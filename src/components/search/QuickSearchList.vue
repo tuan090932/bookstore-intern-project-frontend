@@ -21,7 +21,7 @@
           </div>
           <div class="flex-1 pl-1 mr-16">
             <div class="font-medium">{{ book.title }}</div>
-            <div class="text-white text-sm">{{ book.author }}</div>
+            <div class="text-white text-sm">{{ book.authors.author_name }}</div>
           </div>
           <div class="text-white text-xs">{{ book.publishedDate }}</div>
         </div>
