@@ -1,44 +1,44 @@
 <template>
-  <div class="bg-gray-100 dark:bg-gray-800 py-8">
+  <div class="bg-gray-100 py-8">
     <div v-if="errorMessage" class="text-red-500 text-center mb-4">{{ errorMessage }}</div>
     <div v-else>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="px-4">
-          <div class="rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+          <div class="rounded-lg bg-gray-300 mb-4">
             <img class="w-full h-full object-cover" :src="book.image" alt="Book Image" />
           </div>
         </div>
         <div class="px-4">
-          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">{{ book.title }}</h2>
+          <h2 class="text-2xl font-bold text-gray-800-2">{{ book.title }}</h2>
           <div class="mb-4">
-              <p class="text-red-600 dark:text-red-400 text-4xl mb-5 font-bold">{{ $filters.formatNumber(book.price)}}đ</p>
+              <p class="text-red-600 text-4xl mb-5 font-bold">{{ $filters.formatNumber(book.price)}}đ</p>
             <div class="mb-2 flex">
-              <span class="font-bold text-gray-700 dark:text-gray-300">Stock:</span>
-              <p class="text-gray-600 dark:text-gray-300">{{ book.stock }}</p>
+              <span class="font-bold text-gray-700">Stock:</span>
+              <p class="text-gray-600">{{ book.stock }}</p>
             </div>
             <div class="mb-2 flex">
-              <span class="font-bold text-gray-700 dark:text-gray-300">Number of Pages:</span>
-              <p class="text-gray-600 dark:text-gray-300">{{ book.num_pages }}</p>
+              <span class="font-bold text-gray-700 ">Number of Pages:</span>
+              <p class="text-gray-600">{{ book.num_pages }}</p>
             </div>
             <div class="mb-2 flex">
-              <span class="font-bold text-gray-700 dark:text-gray-300">Authors:</span>
-              <p class="text-gray-600 dark:text-gray-300">{{ book.authors.author_name }}</p>
+              <span class="font-bold text-gray-700">Authors:</span>
+              <p class="text-gray-600">{{ book.authors.author_name }}</p>
             </div>
             <div class="mb-2 flex">
-              <span class="font-bold text-gray-700 dark:text-gray-300">Publisher:</span>
-              <p class="text-gray-600 dark:text-gray-300">{{ book.publishers.publisher_name }}</p>
+              <span class="font-bold text-gray-700">Publisher:</span>
+              <p class="text-gray-600">{{ book.publishers.publisher_name }}</p>
             </div>
             <div class="mb-2 flex">
-              <span class="font-bold text-gray-700 dark:text-gray-300">Category:</span>
-              <p class="text-gray-600 dark:text-gray-300">{{ book.categories.category_name }}</p>
+              <span class="font-bold text-gray-700">Category:</span>
+              <p class="text-gray-600">{{ book.categories.category_name }}</p>
             </div>
           </div>
           <div>
-            <span class="font-bold text-gray-700 dark:text-gray-300">Product Description:</span>
-            <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">{{ book.description }}</p>
+            <span class="font-bold text-gray-700">Product Description:</span>
+            <p class="text-gray-600 text-sm mt-2">{{ book.description }}</p>
           </div>
           <div class="flex items-center mt-4">
-            <span class="font-bold text-gray-700 dark:text-gray-300">Quantity:</span>
+            <span class="font-bold text-gray-700">Quantity:</span>
             <button class="px-2 py-1 mx-2 border" @click="decreaseQuantity">-</button>
             <span>{{ quantity }}</span>
             <button class="px-2 py-1 mx-2 border" @click="increaseQuantity">+</button>

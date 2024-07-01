@@ -35,7 +35,10 @@
               </button>
               <AddToCartButton :bookId="book.book_id" @addToCart="handleAddToCart" />
 
-            
+
+
+
+
             </div>
           </div>
         </div>
@@ -52,38 +55,41 @@
 </template> 
 
 <script>
-import bookService from '@/services/book.service';
 import favoriteService from '@/services/favorite.service';
 import IconAddFavorite from '@/components/favorite/IconAddFavorite.vue';
-import Pagination from '@/components/Pagination.vue'; // Import the Pagination component
+import Pagination from '@/components/Pagination.vue'; 
+import { useBookStore } from '@/stores/book';
 import AddToCartButton from '@/components/cart/AddToCartButton.vue';
+
 export default {
+  components: {
+    IconAddFavorite,
+    Pagination, // Register the Pagination component
+    AddToCartButton,
+  },
   data() {
     return {
-      allBooks: [],
       books: [],
       favorites: [],
       errorMessage: '',
     };
   },
-  components: {
-    IconAddFavorite,
-    Pagination ,
-    AddToCartButton,
+  computed: {
+    allBooks() {
+      const bookStore = useBookStore();
+      return bookStore.getBooks();
+    }
   },
-  mounted() {
-    this.getBooks();
-    this.fetchFavorites();
-  },
+
   methods: {
-    getBooks() {
-      bookService.getAllBooks()
-        .then((response) => {
-          this.allBooks = response;
-        })
-        .catch((error) => {
-          console.error('Error fetching books:', error);
-        });
+    async fetchBooks() {
+      const bookStore = useBookStore();
+      try {
+        await bookStore.fetchBooks();
+      } catch (error) {
+        console.error('Error fetching books:', error);
+        this.errorMessage = 'Error fetching books';
+      }
     },
     fetchFavorites() {
       favoriteService.getFavorites()
@@ -100,12 +106,12 @@ export default {
     },
     updateFavorites() {
       this.fetchFavorites();
-    },
-    handleAddToCart(bookId) {
-      // Logic to handle adding book to cart
-      console.log(`Book with ID ${bookId} added to cart.`);
     }
-  }
+  },
+  mounted() {
+    this.fetchBooks();
+    this.fetchFavorites();
+  },
 };
 </script>
 

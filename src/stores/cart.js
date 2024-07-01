@@ -20,6 +20,7 @@ export const useCartStore = defineStore('cart', {
       try {
         const response = await CartService.addCart(bookId, quantity);
         this.cartItems.push(response.data);
+        alert('Book added to cart successfully');
       } catch (error) {
         console.error('Error adding cart item:', error);
       }

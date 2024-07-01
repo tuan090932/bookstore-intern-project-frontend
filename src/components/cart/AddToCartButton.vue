@@ -18,14 +18,7 @@ export default {
   methods: {
     async addToCart() {
       const cartStore = useCartStore();
-      try {
-        await cartStore.addCartItem(this.bookId);
-        alert('Book added to cart successfully');
-        console.log('Book added to cart successfully');
-      } catch (error) {
-        alert('Error adding book to cart');
-        console.error('Error adding book to cart:', error);
-      }
+      await cartStore.addCartItem(this.bookId);
     }
   }
 };
