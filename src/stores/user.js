@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-
+import AuthService from '@/services/auth.service'
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: null,
-    token: localStorage.getItem('access_token') || ''
+    token: localStorage.getItem('access_token') || '',
+    refreshToken: localStorage.getItem('refresh_token') || ''
   }),
   actions: {
     setUser(user) {
@@ -14,11 +15,17 @@ export const useUserStore = defineStore('user', {
       this.token = token
       localStorage.setItem('access_token', token)
     },
+    setRefreshToken(refreshToken) {
+      this.refreshToken = refreshToken
+      localStorage.setItem('refresh_token', refreshToken)
+    },
     clearUser() {
       this.user = null
       this.token = ''
+      this.refreshToken = ''
       localStorage.removeItem('user')
       localStorage.removeItem('access_token')
+      localStorage.removeItem('refresh_token')
     },
     loadUserFromLocalStorage() {
       const user = localStorage.getItem('user')
@@ -28,13 +35,12 @@ export const useUserStore = defineStore('user', {
         }
       } catch (error) {
         console.error('Failed to parse user from localStorage:', error)
-        // Clear invalid user data from localStorage
         localStorage.removeItem('user')
       }
     },
     async logout() {
       try {
-        // Clear user data and token locally
+        await AuthService.logout()
         this.clearUser()
       } catch (error) {
         console.error('Failed to logout:', error)

@@ -30,6 +30,14 @@ class AuthService {
     const response = await api.get(API_URL + 'profile')
     return response.data
   }
+
+  // Refresh the access_token using the refresh_token
+  async refreshToken(refreshToken) {
+    const response = await api.post(API_URL + 'refresh', {
+      refresh_token: refreshToken
+    })
+    return response
+  }
 }
 
 export default new AuthService()
