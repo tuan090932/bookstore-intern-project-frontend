@@ -33,9 +33,9 @@
               <button class="bg-blue-500 hover:bg-blue-200 text-white py-1 rounded w-full">
                 Buy Now
               </button>
-              <button class="bg-blue-500 hover:bg-blue-200 text-white py-1 rounded w-full">
-                Add to Cart
-              </button>
+              <AddToCartButton :bookId="book.book_id" @addToCart="handleAddToCart" />
+
+            
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@ import bookService from '@/services/book.service';
 import favoriteService from '@/services/favorite.service';
 import IconAddFavorite from '@/components/favorite/IconAddFavorite.vue';
 import Pagination from '@/components/Pagination.vue'; // Import the Pagination component
-
+import AddToCartButton from '@/components/cart/AddToCartButton.vue';
 export default {
   data() {
     return {
@@ -68,7 +68,8 @@ export default {
   },
   components: {
     IconAddFavorite,
-    Pagination // Register the Pagination component
+    Pagination ,
+    AddToCartButton,
   },
   mounted() {
     this.getBooks();
@@ -99,6 +100,10 @@ export default {
     },
     updateFavorites() {
       this.fetchFavorites();
+    },
+    handleAddToCart(bookId) {
+      // Logic to handle adding book to cart
+      console.log(`Book with ID ${bookId} added to cart.`);
     }
   }
 };
