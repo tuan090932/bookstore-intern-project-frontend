@@ -16,6 +16,19 @@
           <div v-if="nameError" class="text-red-500 text-sm mt-1">{{ nameError }}</div>
         </div>
 
+        <!-- User Name -->
+        <div class="mb-4">
+          <label for="userName" class="block text-sm font-medium text-gray-700 mb-2">User Name</label>
+          <input
+            type="text"
+            id="userName"
+            v-model="userName"
+            class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Enter your user name"
+          />
+          <div v-if="userNameError" class="text-red-500 text-sm mt-1">{{ userNameError }}</div>
+        </div>
+        
         <!-- Email -->
         <div class="mb-4">
           <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
@@ -116,7 +129,9 @@ export default {
       passwordError: '',
       confirmPasswordError: '',
       showPassword: false,
-      showConfirmPassword: false // Separate variable for confirm password visibility
+      showConfirmPassword: false,
+      userName: '', // Add userName data property
+      userNameError: '', // Add userName error handling
     }
   },
   methods: {
@@ -125,6 +140,7 @@ export default {
       try {
         // Call AuthService to register user
         const response = await AuthService.register(
+          this.userName, // Include userName in the registration call
           this.name,
           this.email,
           this.password,
@@ -145,6 +161,9 @@ export default {
           if (errors.name) {
             this.nameError = errors.name[0]
           }
+          if (errors.user_name) { // Handle user_name error
+            this.userNameError = errors.user_name[0]
+          }
         } else {
           this.errorMessage = 'An error occurred. Please try again.'
         }
@@ -155,6 +174,7 @@ export default {
       this.emailError = ''
       this.passwordError = ''
       this.confirmPasswordError = ''
+      this.userNameError = '' // Clear userName error
     }
   }
 }
