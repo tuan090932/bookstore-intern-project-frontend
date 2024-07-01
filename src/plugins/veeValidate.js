@@ -11,12 +11,21 @@ export default function setupVeeValidate(app) {
     }
   });
 
+  VeeValidate.defineRule('strongPassword', (value) => {
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}:'"\\|,.<>/?])(?=.*[a-z]).{6,}$/;
+    if (!regex.test(value)) {
+      return 'Password must include 1 uppercase, 1 number, 1 special character, and be 6+ characters long';
+    }
+    return true;
+  });
+
   // Localize VeeValidate
   localize({
     en: {
       messages: {
         ...en.messages,
         required: (required) => `This ${required.field} field is required`,
+        password: 'Password must include 1 uppercase, 1 number, 1 special character, and be 6+ characters long',
         email: 'Please enter a valid email address',
         min: ( min ) => `This field must have at least ${min.rule.params} characters`,
         max: ( max ) => `This field must have at most ${max.rule.params} characters`,

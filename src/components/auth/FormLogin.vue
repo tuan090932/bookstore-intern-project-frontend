@@ -2,60 +2,62 @@
   <div class="min-h-screen flex items-center justify-center w-full bg-gray-100">
     <div class="bg-white shadow-md rounded-lg px-8 py-6 max-w-md">
       <h1 class="text-2xl font-bold text-center mb-4 text-gray-900">Welcome Back!</h1>
-      <div v-if="errorMessage" class="mb-4 text-red-500">
-        {{ errorMessage }}
-      </div>
-      <form @submit.prevent="handleSubmit">
-        <!-- Email -->
-        <div class="mb-4">
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-2"
-            >Email Address</label
+      <ValidationForm @submit="handleSubmit">
+        <!-- Email or Username -->
+        <div class="mb-4 w-80">
+          <label for="emailOrUsername" class="block text-sm font-medium text-gray-700 mb-2"
+            >Email Address or Username</label
           >
-          <input
-            v-model="email"
-            type="email"
-            id="email"
+          <Field
+            v-model="emailOrUsername"
+            name="emailOrUsername"
+            type="text"
+            id="emailOrUsername"
+            rules="required"
             class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="your@email.com"
-            required
+            placeholder="your@email.com or username"
           />
+          <ErrorMessage name="emailOrUsername" class="mt-1 text-red-500 text-sm" />
         </div>
 
         <!-- Password -->
-        <div class="mb-4 relative">
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-2"
-            >Password</label
-          >
-          <input
-            v-model="password"
-            :type="showPassword ? 'text' : 'password'"
-            id="password"
-            class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Enter your password"
-            required
-          />
-          <button
-            type="button"
-            @click="togglePasswordVisibility"
-            class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-          >
-            <font-awesome-icon :icon="showPassword ? 'eye-slash' : 'eye'" />
-          </button>
-          <a
-            href="#"
-            class="text-xs text-gray-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >Forgot Password?</a
-          >
+        <div class="mb-4 w-80 relative">
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+          <div class="relative w-80">
+            <Field
+              v-model="password"
+              name="password"
+              :type="showPassword ? 'text' : 'password'"
+              id="password"
+              :rules="{ required: true, strongPassword: true }"
+              class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Enter your password"
+            />
+            <button
+              type="button"
+              @click="togglePasswordVisibility"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+            >
+              <font-awesome-icon :icon="showPassword ? 'eye-slash' : 'eye'" />
+            </button>
+          </div>
+          <ErrorMessage name="password" class="mt-1 text-red-500 text-sm w-80" />
         </div>
+        <a
+          href="#"
+          class="text-xs text-gray-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >Forgot Password?
+        </a>
 
         <!-- Remember me -->
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center justify-between mb-4 mt-2">
           <div class="flex items-center">
-            <input
+            <Field
               type="checkbox"
+              name="remember"
               id="remember"
               class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:outline-none"
-              checked
+              :value="true"
             />
             <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
           </div>
@@ -73,7 +75,7 @@
         >
           Login
         </button>
-      </form>
+      </ValidationForm>
     </div>
   </div>
 </template>
@@ -85,10 +87,9 @@ import { useUserStore } from '@/stores/user'
 export default {
   data() {
     return {
-      email: '',
+      emailOrUsername: '',
       password: '',
       showPassword: false,
-      errorMessage: ''
     }
   },
   computed: {
@@ -100,20 +101,17 @@ export default {
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword
     },
-    async handleSubmit() {
-      if (this.email && this.password) {
-        try {
-          const response = await AuthService.login(this.email, this.password)
-          const token = response.access_token
-          this.userStore.setToken(token)
-          console.log('Login success!')
-          await this.getUserProfile(token)
-          this.$router.push('/profile')
-        } catch (error) {
-          this.errorMessage = 'Email or password is incorrect'
-        }
-      } else {
-        this.errorMessage = 'Please enter email and password'
+    async handleSubmit(values) {
+      try {
+        const response = await AuthService.login(values.emailOrUsername, values.password)
+        const token = response.access_token
+        this.userStore.setToken(token)
+        console.log('Login success!')
+        await this.getUserProfile(token)
+        this.$router.push('/profile')
+      } catch (error) {
+        // Handle login error
+        console.error('Login failed:', error)
       }
     },
     async getUserProfile(token) {
