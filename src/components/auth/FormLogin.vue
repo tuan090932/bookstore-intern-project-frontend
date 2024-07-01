@@ -3,7 +3,7 @@
     <div class="bg-white shadow-md rounded-lg px-8 py-6 max-w-md">
       <h1 class="text-2xl font-bold text-center mb-4 text-gray-900">Welcome Back!</h1>
       <ValidationForm @submit="handleSubmit">
-        <!-- Hiển thị thông báo lỗi -->
+        <!-- show login error -->
         <div v-if="loginError" class="mb-4 text-red-500 text-sm text-center">
           {{ loginError }}
         </div>

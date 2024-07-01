@@ -15,6 +15,7 @@ export const useUserStore = defineStore('user', {
       this.token = token
       localStorage.setItem('access_token', token)
     },
+    // Set the refresh token in the store and localStorage
     setRefreshToken(refreshToken) {
       this.refreshToken = refreshToken
       localStorage.setItem('refresh_token', refreshToken)
