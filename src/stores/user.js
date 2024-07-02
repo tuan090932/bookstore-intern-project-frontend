@@ -21,9 +21,6 @@ export const useUserStore = defineStore('user', {
       localStorage.setItem('refresh_token', refreshToken)
     },
     clearUser() {
-      console.log(
-        'Clearing user from store and localStorage:',
-      );
       this.user = null
       this.token = ''
       this.refreshToken = ''
