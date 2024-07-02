@@ -62,10 +62,14 @@ api.interceptors.response.use(
           .catch((refreshError) => {
             if (refreshError.response?.status === 401) {
               // Clear user session and redirect to login
+              alert('Your login session has ended, please log in again.')
               userStore.clearUser()
               router.push('/login')
             } else {
               // Handle other refresh token errors
+              alert('Your login session has ended, please log in again.')
+              userStore.clearUser()
+              router.push('/login')
               return Promise.reject(refreshError)
             }
           })
