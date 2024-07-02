@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useUserStore } from '@/stores/user'
+import AuthService from '@/services/auth.service'
 import router from '@/router/index'
 
 const api = axios.create({
@@ -10,50 +11,85 @@ const api = axios.create({
   }
 })
 
+// Add a request interceptor to attach the access_token to the Authorization header
 api.interceptors.request.use(
   (config) => {
     const userStore = useUserStore()
     const token = userStore.token
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`
+      config.headers['Authorization'] = `Bearer ${token}` // Attach token to the Authorization header
     }
     return config
   },
   (error) => {
-    return Promise.reject(error)
+    return Promise.reject(error) // Return error if request fails
   }
 )
+
+// Add a response interceptor to handle token expiration
+let isRefreshing = false // Flag to keep track of whether the token is being refreshed
+let refreshTokenPromise = null // Promise to hold the token refresh request
 
 api.interceptors.response.use(
   (response) => {
     return response
   },
-  (error) => {
+  async (error) => {
     const userStore = useUserStore()
     const status = error.response?.status || 500
+    const originalRequest = error.config
 
-    switch (status) {
-      case 401:
-        alert('You are not authorized to access this or session has ended. Please log in again.')
-        userStore.clearUser()
-        router.push('/login')
-        break
-      case 403:
-        alert('You are forbidden to access this resource.')
-        break
-      case 411:
-        alert('Your login session has ended, please log in again.')
-        userStore.clearUser()
-        router.push('/login')
-        break
-      default:
-        // Handle other errors or statuses as needed
-        break
+    if (status === 401 && originalRequest.url !== `auth/login`) {
+      // Check if the status code is 401 and the request is not the login request
+      const refreshToken = userStore.refreshToken
+
+      // If the token is being refreshed, wait for the promise to resolve
+      if (!isRefreshing) {
+        isRefreshing = true
+        refreshTokenPromise = AuthService.refreshToken(refreshToken) // Call the refreshToken method from the AuthService
+          .then((response) => {
+            const { access_token, refresh_token } = response.data
+
+            // Update tokens in user store
+            userStore.setToken(access_token)
+            userStore.setRefreshToken(refresh_token)
+
+            // Retry original request with new access token
+            originalRequest.headers['Authorization'] = `Bearer ${access_token}`
+            return api(originalRequest)
+          })
+          // If the refresh token request fails, handle the error
+          .catch((refreshError) => {
+            if (refreshError.response?.status === 401) {
+              // Clear user session and redirect to login
+              alert('Your login session has ended, please log in again.')
+              userStore.clearUser()
+              router.push('/login')
+            } else {
+              // Handle other refresh token errors
+              alert('Your login session has ended, please log in again.')
+              userStore.clearUser()
+              router.push('/login')
+              return Promise.reject(refreshError)
+            }
+          })
+          .finally(() => {
+            isRefreshing = false
+          })
+
+        // Return promise to wait for the refreshTokenPromise to resolve
+        return refreshTokenPromise
+      }
+    } else if (status === 403) {
+      alert('You are forbidden to access this resource.')
+    } else if (status === 411) {
+      alert('Your login session has ended, please log in again.')
+      userStore.clearUser()
+      router.push('/login')
     }
 
     return Promise.reject(error)
   }
 )
-
 
 export default api

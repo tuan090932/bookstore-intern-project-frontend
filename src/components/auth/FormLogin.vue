@@ -3,11 +3,14 @@
     <div class="bg-white shadow-md rounded-lg px-8 py-6 max-w-md">
       <h1 class="text-2xl font-bold text-center mb-4 text-gray-900">Welcome Back!</h1>
       <ValidationForm @submit="handleSubmit">
+        <!-- show login error -->
+        <div v-if="loginError" class="mb-4 text-red-500 text-sm text-center">
+          {{ loginError }}
+        </div>
+
         <!-- Email or Username -->
         <div class="mb-4 w-80">
-          <label for="emailOrUsername" class="block text-sm font-medium text-gray-700 mb-2"
-            >Email Address or Username</label
-          >
+          <label for="emailOrUsername" class="block text-sm font-medium text-gray-700 mb-2">Email Address or Username</label>
           <Field
             v-model="emailOrUsername"
             name="emailOrUsername"
@@ -43,11 +46,7 @@
           </div>
           <ErrorMessage name="password" class="mt-1 text-red-500 text-sm w-80" />
         </div>
-        <a
-          href="#"
-          class="text-xs text-gray-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >Forgot Password?
-        </a>
+        <a href="#" class="text-xs text-gray-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Forgot Password?</a>
 
         <!-- Remember me -->
         <div class="flex items-center justify-between mb-4 mt-2">
@@ -61,11 +60,7 @@
             />
             <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
           </div>
-          <router-link
-            to="/register"
-            class="text-xs text-indigo-500 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >Create Account</router-link
-          >
+          <router-link to="/register" class="text-xs text-indigo-500 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Create Account</router-link>
         </div>
 
         <!-- Login Button -->
@@ -90,6 +85,7 @@ export default {
       emailOrUsername: '',
       password: '',
       showPassword: false,
+      loginError: '', 
     }
   },
   computed: {
@@ -104,22 +100,19 @@ export default {
     async handleSubmit(values) {
       try {
         const response = await AuthService.login(values.emailOrUsername, values.password)
-        const token = response.access_token
-        this.userStore.setToken(token)
+        const { access_token, refresh_token , user} = response
+        this.userStore.setToken(access_token)
+        this.userStore.setRefreshToken(refresh_token)
+        this.userStore.setUser(user)
         console.log('Login success!')
-        await this.getUserProfile(token)
         this.$router.push('/profile')
       } catch (error) {
-        // Handle login error
+        if (error.response && error.response.data && error.response.data.error) {
+          this.loginError = error.response.data.error
+        } else {
+          this.loginError = 'An unexpected error occurred. Please try again.'
+        }
         console.error('Login failed:', error)
-      }
-    },
-    async getUserProfile(token) {
-      try {
-        const user = await AuthService.getProfile(token)
-        this.userStore.setUser(user)
-      } catch (error) {
-        console.error('Failed to fetch user profile:', error)
       }
     }
   }
