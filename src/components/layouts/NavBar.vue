@@ -84,6 +84,9 @@
       <router-link v-if="isLoggedIn && user" to="/profile" class="mr-4">
         {{ user.name }}
       </router-link>
+      <router-link v-if="!isLoggedIn" to="/login" class="mr-4">
+        <font-awesome-icon :icon="['fas', 'user']" />
+      </router-link>
       <!-- Cart Button -->
       <router-link to="/cart" class="mr-4">
         <font-awesome-icon :icon="['fas', 'shopping-cart']" />

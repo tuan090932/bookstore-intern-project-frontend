@@ -27,6 +27,9 @@ api.interceptors.request.use(
 )
 
 // Add a response interceptor to handle token expiration
+let isRefreshing = false // Flag to keep track of whether the token is being refreshed
+let refreshTokenPromise = null // Promise to hold the token refresh request
+
 api.interceptors.response.use(
   (response) => {
     return response
@@ -34,24 +37,44 @@ api.interceptors.response.use(
   async (error) => {
     const userStore = useUserStore()
     const status = error.response?.status || 500
+    const originalRequest = error.config
 
-    // If the error status is 401, the access_token has expired
-    if (status === 401) {
-      try {
-        // Refresh the access_token using the refresh_token
-        const response = await AuthService.refreshToken(userStore.refreshToken)
-        const { access_token, refresh_token } = response.data
+    if (status === 401 && originalRequest.url !== `auth/login`) {
+      // Check if the status code is 401 and the request is not the login request
+      const refreshToken = userStore.refreshToken
 
-        // Update the access_token and refresh_token in the user store
-        userStore.setToken(access_token)
-        userStore.setRefreshToken(refresh_token)
+      // If the token is being refreshed, wait for the promise to resolve
+      if (!isRefreshing) {
+        isRefreshing = true
+        refreshTokenPromise = AuthService.refreshToken(refreshToken) // Call the refreshToken method from the AuthService
+          .then((response) => {
+            const { access_token, refresh_token } = response.data
 
-        // Retry the original request with the new access_token
-        error.config.headers['Authorization'] = `Bearer ${access_token}`
-        return api(error.config)
-      } catch (refreshError) { // If the refresh token has expired, clear the user store and redirect to the login page
-        userStore.clearUser()
-        router.push('/login')
+            // Update tokens in user store
+            userStore.setToken(access_token)
+            userStore.setRefreshToken(refresh_token)
+
+            // Retry original request with new access token
+            originalRequest.headers['Authorization'] = `Bearer ${access_token}`
+            return api(originalRequest)
+          })
+          // If the refresh token request fails, handle the error
+          .catch((refreshError) => {
+            if (refreshError.response?.status === 401) {
+              // Clear user session and redirect to login
+              userStore.clearUser()
+              router.push('/login')
+            } else {
+              // Handle other refresh token errors
+              return Promise.reject(refreshError)
+            }
+          })
+          .finally(() => {
+            isRefreshing = false
+          })
+
+        // Return promise to wait for the refreshTokenPromise to resolve
+        return refreshTokenPromise
       }
     } else if (status === 403) {
       alert('You are forbidden to access this resource.')
