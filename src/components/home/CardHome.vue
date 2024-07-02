@@ -33,9 +33,12 @@
               <button class="bg-blue-500 hover:bg-blue-200 text-white py-1 rounded w-full">
                 Buy Now
               </button>
-              <button class="bg-blue-500 hover:bg-blue-200 text-white py-1 rounded w-full">
-                Add to Cart
-              </button>
+              <AddToCartButton :bookId="book.book_id" @addToCart="handleAddToCart" />
+
+
+
+
+
             </div>
           </div>
         </div>
@@ -56,11 +59,13 @@ import favoriteService from '@/services/favorite.service';
 import IconAddFavorite from '@/components/favorite/IconAddFavorite.vue';
 import Pagination from '@/components/Pagination.vue'; 
 import { useBookStore } from '@/stores/book';
+import AddToCartButton from '@/components/cart/AddToCartButton.vue';
 
 export default {
   components: {
     IconAddFavorite,
-    Pagination // Register the Pagination component
+    Pagination, // Register the Pagination component
+    AddToCartButton,
   },
   data() {
     return {

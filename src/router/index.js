@@ -57,13 +57,16 @@ const router = createRouter({
   ]
 })
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/register', '/about', '/', '', '/book/:id', '/search', '/book/:id']
-  const authRequired = !publicPages.includes(to.path)
+  const publicPages = ['/login', '/register', '/about', '/', '', '/search']
+
+  const authRequired = !publicPages.includes(to.path) && !to.matched.some(record => record.path.startsWith('/book/'))
   const userStore = useUserStore()
+
   if (authRequired && !userStore.token) {
     alert('You are not authorized to access this or session has ended. Please log in again.')
     return next({ path: '/login', query: { returnUrl: to.fullPath } })
   }
   next()
 })
+
 export default router
